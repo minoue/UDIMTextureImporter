@@ -1,0 +1,152 @@
+
+[VarDef, dllPath,""] //path to dll
+[VarDef, err,0] //standard error
+[VarDef, ver,0] //version
+[VarDef, stringArg,""]
+[VarDef, responseString,""]
+[VarDef, fileName, ""]
+[VarDef, udimPluginPath, ""]
+// [VarDef, cmdName, ""]
+[VarDef, dllLog, ""]
+
+[VarDef, objPathOut, "/tmp/ZBrush_displacementImporter_out.obj"]
+[VarDef, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
+
+[RoutineDef, CheckSystem,	
+	// check ZBrush version
+	[VarSet, Zvers, [ZBrushInfo,0]]
+	[If, [Val, Zvers] >= 2021.0,,		
+		[Note, "This zscript is not designed for this version of ZBrush.",,3,4737096,,300]
+		[Exit]
+	]	
+	[VarSet, isMac, [ZBrushInfo,6]]	//check Mac or PC
+	// Make sure we have the dll and set its path
+	[If, [ZBrushInfo, 16] == 64, //64 bit
+		[If, isMac,
+			// For test
+			[VarSet, dllPath, "ZFileUtils/ZFileUtils.lib"]	
+            [VarSet, udimPluginPath, "displacementImporter.lib"]
+
+			// For release
+			// [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/ZFileUtils/ZFileUtils.lib"]						
+			// [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/displacementImporter.lib"]						
+            // [VarSet, cmdName, [FileNameResolvePath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/objModifier"]]
+			,	
+			// use the path below for testing only	
+			// [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
+			// use the path below for installed plugins
+			// [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\MyPluginData\ZFileUtils64.dll"]		
+            // [VarSet, udimPluginPath, "ZBrush_udimImporter.lib"]
+		]
+	,//else 32 bit - no longer supported
+		[Note, "\Cff9923This zscript is not designed for this version of Brush.",,3,4737096,,300]
+		[Exit]
+	]
+	[If, [FileExists, [Var,dllPath]],
+		//check that correct version
+		[VarSet, dllVersion, [FileExecute, [Var,dllPath], Version]]
+		[If, [Val,dllVersion] >= 1.0, //dll version
+			//OK
+			,//else earlier version			
+			[Note,"\Cff9923Note :\Cc0c0c0 The \Cff9923 ZFileUtils plugin DLL is an earlier version which does not support this plugin.  Please install correct version."]
+			[Exit]
+		]			
+	, // else no DLL.
+		[Note,"\Cff9923Note :\Cc0c0c0 The \Cff9923 ZFileUtils plugin \CffffffDLL\Cc0c0c0 could not be found at the correct location.  Please re-install the plugin, making sure the relevant files and folders are in the \CffffffZStartup/ZPlugs\Cc0c0c0 folder."]
+		[Exit]
+	]
+	[If, [FileExists, [Var, udimPluginPath]],
+    //OK
+	, // else no DLL.
+		[Note,"\Cff9923Note :\Cc0c0c0 The \Cff9923 ZFileUtils plugin \CffffffDLL\Cc0c0c0 could not be found at the correct location.  Please re-install the plugin, making sure the relevant files and folders are in the \CffffffZStartup/ZPlugs\Cc0c0c0 folder."]
+		[Exit]
+	]
+]//end routine
+
+//call routine here to ensure it's called every time plugin loaded
+[RoutineCall, CheckSystem]
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~ INTERFACE
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[ISubPalette,"ZPlugin:UDIM Importer"]
+
+[IButton,
+    "ZPlugin:UDIM Importer:Import Displacement", // Button name
+    "Test button", // Popup info text
+
+        // Export obj
+        [FileNameSetNext, objPathOut]
+        [IPress, Tool:Export]
+        
+        [VarDef, dialogTitle, "Please select image files"]
+        [VarSet, fileExt, "tif,tiff,exr"]
+        [MemCreate, ZFileUTils_FileExt, 256, 0]
+        [MemWriteString, ZFileUTils_FileExt, fileExt, 0]
+        [VarSet, fileCount, [FileExecute, [Var,dllPath], "GetFilesDialog", #dialogTitle, , ZFileUTils_FileExt]]
+
+        // Cleanup
+        [MemDelete, ZFileUTils_FileExt]
+
+        [if, fileCount == 0,
+            [Note, "No textures are selected."]
+            ,
+        ]
+        
+        [if, fileCount > 0,
+            [MemCreate, memTexturePaths, 256, 0] // to store single texture path
+            [MemCreate, memOutputPaths, 1024, 0]
+            // [MemCreate, memCmdName, 256, 0]
+            [MemCreate, memDllLog, 256, 0]
+            // [MemWriteString, memCmdName, [Var, cmdName], 0]
+
+            [VarSet, index, 1]
+            [VarSet, offset, 0]
+            [Loop, fileCount,
+                [VarSet, err, [FileExecute, [Var, dllPath], GetFilePath, , index, memTexturePaths]]
+                [VarInc, index]
+                [if, err == 0,
+                    [MemReadString, memTexturePaths, fileName]
+                    // [Note, fileName, 1]
+
+                    // Append texture path with ":" at the end of memOutputPaths
+                    [MemWriteString, memOutputPaths, [StrMerge, fileName, ":"], offset]
+                    [VarSet, offset, offset + [StrLength, fileName] + 1]
+                    ,
+                    [LoopContinue]
+                ]
+            ] // End loop
+
+            [VarSet, err, [FileExecute,
+                            [Var, udimPluginPath],
+                            "ImportVectorDisplacement",
+                            objPathOut,
+                            offset,
+                            memOutputPaths,
+                            memDllLog]]
+            [If, err,
+                // [Note, "An error has occured"]
+                [MemReadString, memDllLog, dllLog]
+                [Note, [Var, dllLog]]
+                [Exit]
+                ,
+            ]
+
+            [MemDelete, memTexturePaths]
+            [MemDelete, memOutputPaths]
+            // [MemDelete, memCmdName]
+            [MemDelete, memDllLog]
+        ] // End if fileCount
+
+        [FileNameSetNext, objPathIn]
+        [IPress,Tool:Import]
+
+        [MessageOK, "Done"],
+
+    0, // Initially Disabled? (0: enabled)
+    1, // Button width in pixels,
+    ,
+    ,
+    36 // height
+]//end button
