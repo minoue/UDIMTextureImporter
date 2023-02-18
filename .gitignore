@@ -8,3 +8,5 @@ compile_flags.txt
 *.obj
 *.ztl
 *.zsc
+*.lib
+*.dll
