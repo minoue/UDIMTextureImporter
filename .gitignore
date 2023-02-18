@@ -1,0 +1,10 @@
+.DS_Store
+ZFileUtils
+lib
+objModifier
+compile_flags.txt
+*.tif
+*.exr
+*.obj
+*.ztl
+displacementImporter.cpp
