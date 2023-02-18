@@ -1,5 +1,5 @@
-#ifndef ZBrush_udimImporter_hpp
-#define ZBrush_udimImporter_hpp
+#ifndef displacementImporter_hpp
+#define displacementImporter_hpp
 
 // how to make a dylib
 // https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/100-Articles/CreatingDynamicLibraries.html#//apple_ref/doc/uid/TP40002073-SW1
@@ -17,4 +17,4 @@ float ImportVectorDisplacement(char* textFromZBrush, double valueFromZBrush, cha
 }
 #endif
 
-#endif /* ZBrush_udimImporter_hpp */
+#endif /* displacementImporter_hpp */

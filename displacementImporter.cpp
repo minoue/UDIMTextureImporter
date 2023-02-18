@@ -52,7 +52,7 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
     for (std::string& tex : texture_paths) {
         cmd.append(" " + tex);
     }
-    
+
     ofs << cmd << std::endl;
 
     auto ret = system(nullptr);
@@ -69,7 +69,7 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
         std::cout << "shell is NOT available" << std::endl;
         return 1.0;
     }
-    
+
     ofs.close();
     return 0.0f;
 }
