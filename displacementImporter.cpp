@@ -10,23 +10,13 @@
 #define EXPORT __attribute__((visibility("default")))
 
 
-// a sample exported function
-float EXPORT Version(char* pDontCare, double optValue, char* pOptBuffer1, int optBuffer1Size,
-    char* pOptBuffer2, int optBuffer2Size, char** zData)
-{
-    return 1.0f;
-}
-
-float EXPORT HelloLib(char* textFromZBrush, double valueFromZBrush, char* pOptBuffer1, int optBuffer1Size,
-    char* pOptBuffer2, int optBuffer2Size, char** zData)
-{
-    strcpy(pOptBuffer1, "Hello from my Lib file.");
-
-    return 0.0f;
-}
-
-float EXPORT ImportVectorDisplacement(char* textFromZBrush, double valueFromZBrush, char* pOptBuffer1,
-    int optBuffer1Size, char* pOptBuffer2, int optBuffer2Size, char** zData)
+float EXPORT ImportVectorDisplacement(char* textFromZBrush,
+                                      double valueFromZBrush,
+                                      char* pOptBuffer1,
+                                      int optBuffer1Size,
+                                      char* pOptBuffer2,
+                                      int optBuffer2Size,
+                                      char** zData)
 {
 
     const char* fileName = "/Users/minoue/temp.log";
