@@ -4,9 +4,8 @@
 [VarDef, fileName, ""]
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
-
-[VarDef, objPathOut, "/tmp/ZBrush_displacementImporter_out.obj"]
-[VarDef, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
+[VarDef, objPathOut, ""]
+[VarDef, objPathIn, ""]
 
 
 [RoutineDef, CheckSystem,
@@ -22,8 +21,13 @@
         // [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/ZFileUtils/ZFileUtils.lib"]
         // [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/displacementImporter.lib"]
 
+        [VarSet, objPathOut, "/tmp/ZBrush_displacementImporter_out.obj"]
+        [VarSet, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
+
     , // else, Windows
 
+        [Note, "Windows is not supported yet."]
+        [Exit]
         // For test
         // [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
         // [VarSet, udimPluginPath, "displacementImporter.dll"]
@@ -31,6 +35,9 @@
         // For Release
         // [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\MyPluginData\ZFileUtils64.dll"]
         // [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/displacementImporter.dll"]
+
+        // [VarSet, objPathOut, "/tmp/ZBrush_displacementImporter_out.obj"]
+        // [VarSet, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
     ]
 
     // Check ZFileUtils
