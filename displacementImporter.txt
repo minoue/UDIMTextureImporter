@@ -150,6 +150,30 @@
         [FileNameSetNext, objPathIn]
         [IPress,Tool:Import]
 
+        // Cleanup
+        [If, [FileExists, objPathIn],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathIn]] // Delete this file...
+            [If, err,
+                [Note, "Failed to delete the sculpted mesh." , , 2]
+            , //else OK
+                // Do nothing
+            ]
+        , // else no file
+            [Note, "No file to delete!" , , 2]
+        ]
+
+        [VarDef, objPathOutFullPath, [StrMerge, "!:", [Var, objPathOut]]]
+        [If, [FileExists, objPathOutFullPath],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathOutFullPath]] // Delete this file...
+            [If, err,
+                [Note, "Failed to delete the raw mesh." , , 2]
+            , //else OK
+                // Do nothing
+            ]
+        , // else no file
+            [Note, "No file to delete!" , , 2]
+        ]
+
         [MessageOK, "Done"],
 
     0, // Initially Disabled? (0: enabled)
