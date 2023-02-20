@@ -19,14 +19,17 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
                                       char** zData)
 {
 
-    const char* fileName = "/Users/minoue/temp.log";
-    std::ofstream ofs(fileName);
+    std::string logPath;
+
+#ifdef _WIN32
+    logPath = "";
+#endif
+
+#ifdef __APPLE__
+    logPath = "/tmp/displacementImporter.log";
+#endif
 
     std::string objFile(textFromZBrush);    // from zbrush
-
-    if (!ofs) {
-        return 1.0f;
-    }
 
     std::vector<std::string> texture_paths;
 
@@ -52,8 +55,7 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
     for (std::string& tex : texture_paths) {
         cmd.append(" " + tex);
     }
-
-    ofs << cmd << std::endl;
+    cmd.append(" > " + logPath);
 
     auto ret = system(nullptr);
 
@@ -70,6 +72,15 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
         return 1.0;
     }
 
-    ofs.close();
+    // log
+    std::ofstream logOfs(logPath, std::ios::app);
+    if (!logOfs) {
+        strcpy(pOptBuffer2, "Failed to open the log file.");
+        return 1.0;
+    } 
+    logOfs << "Command running: " << std::endl;
+    logOfs << cmd << std::endl;
+    logOfs.close();
+
     return 0.0f;
 }
