@@ -6,9 +6,13 @@
 [VarDef, dllLog, ""]
 [VarDef, objPathOut, ""]
 [VarDef, objPathIn, ""]
+[VarDef, zbrushVersion, 0]
 
 
 [RoutineDef, CheckSystem,
+    // Get zbrush version
+	[VarSet, zbrushVersion, [ZBrushInfo, 0]]	// check Mac or PC
+
 	[VarSet, isMac, [ZBrushInfo, 6]]	// check Mac or PC
 	// Make sure we have the dll and set its path
 
@@ -127,7 +131,7 @@
                             [Var, udimPluginPath],
                             "ImportVectorDisplacement",
                             objPathOut,
-                            offset,
+                            zbrushVersion,
                             memOutputPaths,
                             memDllLog]]
             [If, err,

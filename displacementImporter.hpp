@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 
-float ImportVectorDisplacement(char* textFromZBrush, double valueFromZBrush, char* pOptBuffer1, int optBuffer1Size,
+float ImportVectorDisplacement(char* textFromZBrush, double zversion, char* pOptBuffer1, int optBuffer1Size,
     char* pOptBuffer2, int optBuffer2Size, char** zData);
 
 #ifdef __cplusplus

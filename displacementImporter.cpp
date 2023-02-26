@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 #include "displacementImporter.hpp"
 
@@ -11,7 +12,7 @@
 
 
 float EXPORT ImportVectorDisplacement(char* textFromZBrush,
-                                      double valueFromZBrush,
+                                      double zversion,
                                       char* pOptBuffer1,
                                       int optBuffer1Size,
                                       char* pOptBuffer2,
@@ -29,6 +30,7 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
     logPath = "/tmp/displacementImporter.log";
 #endif
 
+    int zbrushVersion = static_cast<int>(zversion);
     std::string objFile(textFromZBrush);    // from zbrush
     std::vector<std::string> texture_paths;
     std::string cmdString(pOptBuffer1);
@@ -46,21 +48,18 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
         }
     }
 
-    std::string cmd = "/Applications/ZBrush\\ 2022/ZStartup/ZPlugs64/displacementImporter/objModifier";
-    cmd.append(" -i " + objFile);
-    cmd.append(" -o ZBrush_displacementImporter_in");
-    cmd.append(" -t");
-
+    std::stringstream cmdstream;
+    cmdstream << "/Applications/ZBrush\\ " << zbrushVersion << "/ZStartup/ZPlugs64/displacementImporter/objModifier";
+    cmdstream << " -i " << objFile << " -o ZBrush_displacementImporter_in" << " -t"; 
     for (std::string& tex : texture_paths) {
-        cmd.append(" " + tex);
+        cmdstream << " " << tex;
     }
-    cmd.append(" > " + logPath);
+    cmdstream << " > " << logPath;
 
     auto ret = system(nullptr);
-
     if (ret != 0) {
         std::cout << "shell available" << std::endl;
-        int r = system(cmd.c_str());
+        int r = system(cmdstream.str().c_str());
         if (r != 0) {
             // not successful
             strcpy(pOptBuffer2, "Failed to run the plugin command. Check the log and send it to developer.");
@@ -77,8 +76,11 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
         strcpy(pOptBuffer2, "Failed to open the log file.");
         return 1.0;
     } 
+
     logOfs << "Command running: " << std::endl;
-    logOfs << cmd << std::endl;
+    logOfs << "ZBrush version : " << zbrushVersion << std::endl;
+    logOfs << cmdstream.str() << std::endl;
+    logOfs << "Done" << std::endl;
     logOfs.close();
 
     return 0.0f;
