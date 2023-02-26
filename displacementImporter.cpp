@@ -30,14 +30,13 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
 #endif
 
     std::string objFile(textFromZBrush);    // from zbrush
-
     std::vector<std::string> texture_paths;
-
-    int count = static_cast<int>(valueFromZBrush);
+    std::string cmdString(pOptBuffer1);
+    int cmdLength = static_cast<int>(cmdString.length());
 
     std::string path;
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < cmdLength; i++) {
         const char c = pOptBuffer1[i];
         if (c == ':') {
             texture_paths.push_back(path);
