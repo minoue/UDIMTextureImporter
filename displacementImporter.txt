@@ -29,19 +29,16 @@
         [VarSet, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
 
     , // else, Windows
-
-        [Note, "Windows is not supported yet."]
-        [Exit]
         // For test
-        // [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
-        // [VarSet, udimPluginPath, "displacementImporter.dll"]
+        [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
+        [VarSet, udimPluginPath, "displacementImporter.dll"]
+
+        [VarSet, objPathOut, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_out.obj"]
+        [VarSet, objPathIn, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_in.obj"]
 
         // For Release
         // [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\MyPluginData\ZFileUtils64.dll"]
         // [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/displacementImporter.dll"]
-
-        // [VarSet, objPathOut, "/tmp/ZBrush_displacementImporter_out.obj"]
-        // [VarSet, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
     ]
 
     // Check ZFileUtils
@@ -120,7 +117,7 @@
                     [MemReadString, memTexturePaths, fileName]
 
                     // Append texture path with ":" at the end of memOutputPaths
-                    [MemWriteString, memOutputPaths, [StrMerge, fileName, ":"], offset]
+                    [MemWriteString, memOutputPaths, [StrMerge, fileName, "#"], offset]
                     [VarSet, offset, offset + [StrLength, fileName] + 1]
                     ,
                     [LoopContinue]
@@ -163,19 +160,29 @@
                 // Do nothing
             ]
         , // else no file
-            [Note, "No file to delete!" , , 2]
+            // [Note, "No file to delete!" , , 2]
         ]
 
-        [VarDef, objPathOutFullPath, [StrMerge, "!:", [Var, objPathOut]]]
-        [If, [FileExists, objPathOutFullPath],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathOutFullPath]] // Delete this file...
+        [If, [FileExists, objPathOut],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathOut]] // Delete this file...
             [If, err,
                 [Note, "Failed to delete the raw mesh." , , 2]
             , //else OK
                 // Do nothing
             ]
         , // else no file
-            [Note, "No file to delete!" , , 2]
+            // [Note, "No file to delete!" , , 2]
+        ]
+        
+        [If, [FileExists, [StrMerge, "!:", [Var, objPathOut]]],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", [StrMerge, "!:", [Var, objPathOut]]]]
+            [If, err,
+                [Note, "Failed to delete the raw mesh." , , 2]
+            , //else OK
+                // Do nothing
+            ]
+        , // else no file
+            // [Note, "No file to delete!" , , 2]
         ]
 
         [MessageOK, "Done"],

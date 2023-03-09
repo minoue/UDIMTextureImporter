@@ -8,8 +8,6 @@
 
 #include "displacementImporter.hpp"
 
-#define EXPORT __attribute__((visibility("default")))
-
 
 float EXPORT ImportVectorDisplacement(char* textFromZBrush,
                                       double zversion,
@@ -23,12 +21,17 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
     std::string logPath;
 
 #ifdef _WIN32
-    logPath = "";
-#endif
-
-#ifdef __APPLE__
+    logPath = "C:\\Users\\Public\\Pixologic\\displacementImporter.log";
+#else // MacOS
     logPath = "/tmp/displacementImporter.log";
 #endif
+    
+    // log
+    std::ofstream logOfs(logPath, std::ios::out);
+    if (!logOfs) {
+        strcpy(pOptBuffer2, "Failed to open the log file.");
+        return 1.0;
+    } 
 
     int zbrushVersion = static_cast<int>(zversion);
     std::string objFile(textFromZBrush);    // from zbrush
@@ -40,7 +43,7 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
 
     for (int i = 0; i < cmdLength; i++) {
         const char c = pOptBuffer1[i];
-        if (c == ':') {
+        if (c == '#') {
             texture_paths.push_back(path);
             path.clear();
         } else {
@@ -49,12 +52,18 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
     }
 
     std::stringstream cmdstream;
+
+#ifdef _WIN32
+    cmdstream << "\"C:/Program Files/Pixologic/ZBrush 2022/ZStartup/ZPlugs64/displacementImporter/objModifier.exe\"";
+#else // MacOS
     cmdstream << "/Applications/ZBrush\\ " << zbrushVersion << "/ZStartup/ZPlugs64/displacementImporter/objModifier";
+#endif
+
     cmdstream << " -i " << objFile << " -o ZBrush_displacementImporter_in" << " -t"; 
     for (std::string& tex : texture_paths) {
         cmdstream << " " << tex;
     }
-    cmdstream << " > " << logPath;
+    // cmdstream << " > " << logPath;
 
     auto ret = system(nullptr);
     if (ret != 0) {
@@ -70,13 +79,6 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
         return 1.0;
     }
 
-    // log
-    std::ofstream logOfs(logPath, std::ios::app);
-    if (!logOfs) {
-        strcpy(pOptBuffer2, "Failed to open the log file.");
-        return 1.0;
-    } 
-
     logOfs << "Command running: " << std::endl;
     logOfs << "ZBrush version : " << zbrushVersion << std::endl;
     logOfs << cmdstream.str() << std::endl;
@@ -85,3 +87,30 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
 
     return 0.0f;
 }
+
+
+#ifdef _WIN32
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+{
+    switch (fdwReason)
+    {
+        case DLL_PROCESS_ATTACH:
+            // attach to process
+            // return FALSE to fail DLL load
+            break;
+
+        case DLL_PROCESS_DETACH:
+            // detach from process
+            break;
+
+        case DLL_THREAD_ATTACH:
+            // attach to thread
+            break;
+
+        case DLL_THREAD_DETACH:
+            // detach from thread
+            break;
+    }
+    return TRUE; // succesful
+}
+#endif
