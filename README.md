@@ -8,13 +8,15 @@ UDIM normal/vector displacement importer
 
 ## How to build
 
-For MacOS
-
+#### MacOS
 ```
 clang++ -dynamiclib -std=c++11 -current_version 1.0 -fvisibility=hidden -o displacementImporter.lib displacementImporter.cpp
 ```
 
-For Windows
+#### Windows
 ```
--
+mkdir build
+cd build
+cmake ../
+cmake --build . --config Release --target install
 ```
