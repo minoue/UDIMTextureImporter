@@ -4,8 +4,10 @@
 [VarDef, fileName, ""]
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
-[VarDef, objPathOut, ""]
+
 [VarDef, objPathIn, ""]
+[VarDef, objPathOut, ""]
+
 [VarDef, zbrushVersion, 0]
 
 
@@ -17,28 +19,27 @@
 	// Make sure we have the dll and set its path
 
     [If, isMac,
-        // For test
-        [VarSet, dllPath, "ZFileUtils/ZFileUtils.lib"]
-        [VarSet, udimPluginPath, "displacementImporter.lib"]
-
         // For release
-        // [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/ZFileUtils/ZFileUtils.lib"]
-        // [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/displacementImporter.lib"]
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/ZFileUtils/ZFileUtils.lib"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/displacementImporter.lib"]
 
-        [VarSet, objPathOut, "/tmp/ZBrush_displacementImporter_out.obj"]
-        [VarSet, objPathIn, "!:/tmp/ZBrush_displacementImporter_in.obj"]
+        [VarSet, objPathOut, "/Users/Shared/Pixologic/ZBrush_displacementImporter_out.obj"]
+        [VarSet, objPathIn, "!:/Users/Shared/Pixologic/ZBrush_displacementImporter_in.obj"]
 
-    , // else, Windows
         // For test
-        [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
-        [VarSet, udimPluginPath, "displacementImporter.dll"]
+        // [VarSet, dllPath, "ZFileUtils/ZFileUtils.lib"]
+        // [VarSet, udimPluginPath, "displacementImporter.lib"]
+    , // else, Windows
+        // For Release
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\MyPluginData\ZFileUtils64.dll"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\UDIMImporter\displacementImporter.dll"]
 
         [VarSet, objPathOut, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_out.obj"]
         [VarSet, objPathIn, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_in.obj"]
-
-        // For Release
-        // [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\MyPluginData\ZFileUtils64.dll"]
-        // [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMImporter/displacementImporter.dll"]
+        
+        // For test
+        // [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
+        // [VarSet, udimPluginPath, "displacementImporter.dll"]
     ]
 
     // Check ZFileUtils
