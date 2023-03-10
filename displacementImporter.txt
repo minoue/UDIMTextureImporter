@@ -85,23 +85,25 @@
     "ZPlugin:UDIM Importer:Import Displacement", // Button name
     "Test button", // Popup info text
 
-        // Export obj
-        [FileNameSetNext, objPathOut]
-        [IPress, Tool:Export]
-
         [VarDef, dialogTitle, "Please select image files"]
         [VarSet, fileExt, "tif,tiff,exr"]
         [MemCreate, ZFileUTils_FileExt, 256, 0]
         [MemWriteString, ZFileUTils_FileExt, fileExt, 0]
         [VarSet, fileCount, [FileExecute, [Var,dllPath], "GetFilesDialog", #dialogTitle, , ZFileUTils_FileExt]]
 
-        // Cleanup
-        [MemDelete, ZFileUTils_FileExt]
-
         [if, fileCount == 0,
-            [Note, "No textures are selected."]
+            [Note, "No textures are selected. Aborted."]
+            [MemDelete, ZFileUTils_FileExt]
+            [Exit]
             ,
         ]
+
+        // Export obj
+        [FileNameSetNext, objPathOut]
+        [IPress, Tool:Export]
+
+        // Cleanup
+        [MemDelete, ZFileUTils_FileExt]
 
         [if, fileCount > 0,
             [MemCreate, memTexturePaths, 256, 0] // to store single texture path
