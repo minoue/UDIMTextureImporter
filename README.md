@@ -4,13 +4,14 @@ UDIM normal/vector displacement importer
 
 
 ## Requirements
-[objModifier](https://github.com/minoue/objModifier)
+* [objModifier](https://github.com/minoue/objModifier)
+* C++17
 
 ## How to build
 
 #### MacOS
 ```
-clang++ -dynamiclib -std=c++11 -current_version 1.0 -fvisibility=hidden -o displacementImporter.lib displacementImporter.cpp
+clang++ -dynamiclib -std=c++17 -current_version 1.0 -fvisibility=hidden -o displacementImporter.lib displacementImporter.cpp
 ```
 
 #### Windows
