@@ -5,9 +5,6 @@
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
 
-[VarDef, objPathIn, ""]
-[VarDef, objPathOut, ""]
-
 [VarDef, zbrushVersion, 0]
 [VarDef, pluginPath, ""]
 [VarDef, objPathToDLL, ""]
@@ -30,23 +27,9 @@
         [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/ZFileUtils/ZFileUtils.lib"]
         [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/displacementImporter.lib"]
 
-        [VarSet, objPathOut, "/Users/Shared/Pixologic/ZBrush_displacementImporter_out.obj"]
-        [VarSet, objPathIn, "!:/Users/Shared/Pixologic/ZBrush_displacementImporter_in.obj"]
-
-        // For test
-        // [VarSet, dllPath, "ZFileUtils/ZFileUtils.lib"]
-        // [VarSet, udimPluginPath, "displacementImporter.lib"]
     , // else, Windows
-        // For Release
         [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\displacementImporter\ZFileUtils\ZFileUtils64.dll"]
         [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\displacementImporter\displacementImporter.dll"]
-
-        [VarSet, objPathOut, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_out.obj"]
-        [VarSet, objPathIn, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_in.obj"]
-        
-        // For test
-        // [VarSet, dllPath, "ZFileUtils\ZFileUtils64.dll"]
-        // [VarSet, udimPluginPath, "displacementImporter.dll"]
     ]
 
     // Check ZFileUtils
@@ -106,7 +89,6 @@
         ]
 
         // Export obj
-        [FileNameSetNext, objPathOut]
         [IPress, Tool:Export]
         [FileNameSetNext, objPathToDLL]
         [IPress, Tool:Export]
