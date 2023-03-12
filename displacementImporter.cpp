@@ -21,7 +21,7 @@ float EXPORT ImportVectorDisplacement(char* textFromZBrush,
     std::string logPath;
 
 #ifdef _WIN32
-    logPath = "C:\\Users\\Public\\Pixologic\\displacementImporter.log";
+    logPath = "C:/Users/Public/Pixologic/displacementImporter.log";
 #else // MacOS
     logPath = "/tmp/displacementImporter.log";
 #endif
