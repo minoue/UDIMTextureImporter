@@ -9,6 +9,9 @@
 [VarDef, objPathOut, ""]
 
 [VarDef, zbrushVersion, 0]
+[VarDef, pluginPath, ""]
+[VarDef, objPathToDLL, ""]
+[VarDef, objPathFromDLL, ""]
 
 
 [RoutineDef, CheckSystem,
@@ -17,6 +20,10 @@
 
 	[VarSet, isMac, [ZBrushInfo, 6]]	// check Mac or PC
 	// Make sure we have the dll and set its path
+
+    [VarSet, pluginPath, [FileNameResolvePath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/objModifier"]]
+    [VarSet, objPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.obj"]]
+    [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.obj"]]
 
     [If, isMac,
         // For release
@@ -31,8 +38,8 @@
         // [VarSet, udimPluginPath, "displacementImporter.lib"]
     , // else, Windows
         // For Release
-        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\MyPluginData\ZFileUtils64.dll"]
-        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\UDIMImporter\displacementImporter.dll"]
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\displacementImporter\ZFileUtils\ZFileUtils64.dll"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\displacementImporter\displacementImporter.dll"]
 
         [VarSet, objPathOut, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_out.obj"]
         [VarSet, objPathIn, "C:\Users\Public\Pixologic\ZBrush_displacementImporter_in.obj"]
@@ -78,11 +85,11 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-[ISubPalette,"ZPlugin:UDIM Importer"]
+[ISubPalette,"ZPlugin:Displacement Importer"]
 
 
 [IButton,
-    "ZPlugin:UDIM Importer:Import Displacement", // Button name
+    "ZPlugin:Displacement Importer:Import Displacement", // Button name
     "Test button", // Popup info text
 
         [VarDef, dialogTitle, "Please select image files"]
@@ -101,17 +108,27 @@
         // Export obj
         [FileNameSetNext, objPathOut]
         [IPress, Tool:Export]
+        [FileNameSetNext, objPathToDLL]
+        [IPress, Tool:Export]
 
         // Cleanup
         [MemDelete, ZFileUTils_FileExt]
 
         [if, fileCount > 0,
             [MemCreate, memTexturePaths, 256, 0] // to store single texture path
-            [MemCreate, memOutputPaths, 1024, 0]
+            [MemCreate, memOutputPaths, 2048, 0]
             [MemCreate, memDllLog, 256, 0]
 
             [VarSet, index, 1]
             [VarSet, offset, 0]
+
+            // Append objModifier plugin path
+            [MemWriteString, memOutputPaths, [StrMerge, pluginPath, "#"], offset]
+            [VarSet, offset, offset + [StrLength, pluginPath] + 1]
+
+            // Append obj file path
+            [MemWriteString, memOutputPaths, [StrMerge, objPathToDLL, "#"], offset]
+            [VarSet, offset, offset + [StrLength, objPathToDLL] + 1]
 
             [Loop, fileCount,
                 [VarSet, err, [FileExecute, [Var, dllPath], GetFilePath, , index, memTexturePaths]]
@@ -119,7 +136,7 @@
                 [if, err == 0,
                     [MemReadString, memTexturePaths, fileName]
 
-                    // Append texture path with ":" at the end of memOutputPaths
+                    // Append texture path with "#" at the end of memOutputPaths
                     [MemWriteString, memOutputPaths, [StrMerge, fileName, "#"], offset]
                     [VarSet, offset, offset + [StrLength, fileName] + 1]
                     ,
@@ -130,7 +147,7 @@
             [VarSet, err, [FileExecute,
                             [Var, udimPluginPath],
                             "ImportVectorDisplacement",
-                            objPathOut,
+                            objPathToDLL,
                             zbrushVersion,
                             memOutputPaths,
                             memDllLog]]
@@ -151,12 +168,13 @@
 
         ] // End if fileCount
 
-        [FileNameSetNext, objPathIn]
+
+        [FileNameSetNext, objPathFromDLL]
         [IPress,Tool:Import]
 
         // Cleanup
-        [If, [FileExists, objPathIn],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathIn]] // Delete this file...
+        [If, [FileExists, objPathFromDLL],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathFromDLL]] // Delete this file...
             [If, err,
                 [Note, "Failed to delete the sculpted mesh." , , 2]
             , //else OK
@@ -166,8 +184,8 @@
             // [Note, "No file to delete!" , , 2]
         ]
 
-        [If, [FileExists, objPathOut],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathOut]] // Delete this file...
+        [If, [FileExists, objPathToDLL],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathToDLL]] // Delete this file...
             [If, err,
                 [Note, "Failed to delete the raw mesh." , , 2]
             , //else OK
@@ -177,8 +195,8 @@
             // [Note, "No file to delete!" , , 2]
         ]
         
-        [If, [FileExists, [StrMerge, "!:", [Var, objPathOut]]],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", [StrMerge, "!:", [Var, objPathOut]]]]
+        [If, [FileExists, [StrMerge, "!:", [Var, objPathToDLL]]],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", [StrMerge, "!:", [Var, objPathToDLL]]]]
             [If, err,
                 [Note, "Failed to delete the raw mesh." , , 2]
             , //else OK
