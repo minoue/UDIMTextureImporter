@@ -5,15 +5,15 @@
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
 
-[VarDef, zbrushVersion, 0]
 [VarDef, pluginPath, ""]
 [VarDef, objPathToDLL, ""]
 [VarDef, objPathFromDLL, ""]
 
+[VarDef, dspMode, 0]
+
 
 [RoutineDef, CheckSystem,
     // Get zbrush version
-	[VarSet, zbrushVersion, [ZBrushInfo, 0]]	// check Mac or PC
 
 	[VarSet, isMac, [ZBrushInfo, 6]]	// check Mac or PC
 	// Make sure we have the dll and set its path
@@ -69,11 +69,29 @@
 
 
 [ISubPalette,"ZPlugin:Displacement Importer"]
+       
+// [ISwitch, "ZPlugin:Displacement Importer:test", 1, "Info text", [MessageOK, On], [MessageOK, Off]]
 
+[ISwitch,
+    "ZPlugin:Displacement Importer:Tangent Vector",
+    1,
+    "Tangent Vector ON",
+    // Commands group to execute when button is pressed
+    [VarSet, dspMode, 1]
+    ,
+    // Commands group to execute when button is unpressed
+    [VarSet, dspMode, 0]
+    ,
+    0
+    ,
+    1
+    ,
+    0
+] 
 
 [IButton,
     "ZPlugin:Displacement Importer:Import Displacement", // Button name
-    "Test button", // Popup info text
+    "Import Displacement", // Popup info text
 
         [VarDef, dialogTitle, "Please select image files"]
         [VarSet, fileExt, "tif,tiff,exr"]
@@ -128,9 +146,9 @@
 
             [VarSet, err, [FileExecute,
                             [Var, udimPluginPath],
-                            "ImportVectorDisplacement",
+                            "ImportDisplacement",
                             objPathToDLL,
-                            zbrushVersion,
+                            dspMode,
                             memOutputPaths,
                             memDllLog]]
             [If, err,
@@ -192,7 +210,7 @@
 
     0, // Initially Disabled? (0: enabled)
     1, // Button width in pixels,
-    ,
+    , // optional button icon
     ,
     36 // height
 ]//end button
