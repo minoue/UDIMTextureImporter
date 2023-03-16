@@ -107,7 +107,6 @@
         ]
 
         // Export obj
-        [IPress, Tool:Export]
         [FileNameSetNext, objPathToDLL]
         [IPress, Tool:Export]
 
