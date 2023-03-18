@@ -21,6 +21,7 @@ float EXPORT ImportDisplacement(char* textFromZBrush,
     std::vector<std::string> cmdVector;
     std::string cmdString(pOptBuffer1);
 
+    int mode = static_cast<int>(dspMode);
     int cmdLength = static_cast<int>(cmdString.length());
 
     // Split/Convert command strings
@@ -66,7 +67,12 @@ float EXPORT ImportDisplacement(char* textFromZBrush,
 
     // Run command setup
     std::stringstream cmdstream;
-    cmdstream << objModifierPath << " -i " << objFilePath << " -o dspImporter_from_DLL -t";
+    cmdstream << objModifierPath << " -i " << objFilePath << " -o dspImporter_from_DLL";
+    if (mode == 0) {
+        // Normal displacement
+        cmdstream << " -n";
+    }
+    cmdstream << " -t";
     for (std::string& tex : texture_paths) {
         cmdstream << " " << tex;
     }

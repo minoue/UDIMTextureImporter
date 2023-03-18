@@ -9,7 +9,7 @@
 [VarDef, objPathToDLL, ""]
 [VarDef, objPathFromDLL, ""]
 
-[VarDef, dspMode, 0]
+[VarDef, dspMode, 1] // 1 = tangent by default, 0 = Normal
 
 
 [RoutineDef, CheckSystem,
