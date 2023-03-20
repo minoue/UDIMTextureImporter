@@ -18,18 +18,18 @@
 	[VarSet, isMac, [ZBrushInfo, 6]]	// check Mac or PC
 	// Make sure we have the dll and set its path
 
-    [VarSet, pluginPath, [FileNameResolvePath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/objModifier"]]
+    [VarSet, pluginPath, [FileNameResolvePath, "ZBRUSH_ZSTARTUP/ZPlugs64/DisplacementImporterData/objModifier"]]
     [VarSet, objPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.obj"]]
     [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.obj"]]
 
     [If, isMac,
         // For release
-        [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/ZFileUtils/ZFileUtils.lib"]
-        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/displacementImporter/displacementImporter.lib"]
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/DisplacementImporterData/ZFileUtils/ZFileUtils.lib"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/DisplacementImporterData/displacementImporter.lib"]
 
     , // else, Windows
-        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\displacementImporter\ZFileUtils\ZFileUtils64.dll"]
-        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\displacementImporter\displacementImporter.dll"]
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\DisplacementImporterData\ZFileUtils\ZFileUtils64.dll"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\DisplacementImporterData\displacementImporter.dll"]
     ]
 
     // Check ZFileUtils
