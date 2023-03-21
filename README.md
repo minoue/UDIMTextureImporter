@@ -3,8 +3,7 @@
 UDIM normal/vector displacement importer
 
 
-<iframe src="https://player.vimeo.com/video/809951157?h=3208d1af24" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-<p><a href="https://vimeo.com/809951157">UDIM Vector Displacement Importer for ZBrush</a> from <a href="https://vimeo.com/user4337917">Michi Inoue</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8190-48a2260320f9.mp4
 
 
 ## Requirements
