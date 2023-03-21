@@ -25,7 +25,7 @@ else()
 endif()
 
 set(TARGET_TYPE RUNTIME)
-set(INSTALL_DIR ../)
+set(INSTALL_DIR ../DisplacementImporterData)
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 
 install(TARGETS ${PROJECT_NAME} ${TARGET_TYPE} DESTINATION ${INSTALL_DIR})
