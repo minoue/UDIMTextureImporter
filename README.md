@@ -7,10 +7,11 @@ https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8
 
 ## Notes:
 
-<span style="font-size: 120%; color: red; font-weight:bold">
-This early version may still have bugs. It is recommended to save the file under a different name and use a new layer.
-It is not guaranteed to work in all environments.
-</span>
+**This early version may still have bugs. It is recommended to save the file under a different name and use a new layer. It is not guaranteed to work in all environments.**
+
+**Because of a technical limitation, this plugin needs to export a temporary obj file and it may take some time if your mesh has more than a few million polygons. You might want to take a cup of tea or coffee.**
+
+
 
 ## Requirements for maps
 Displacement maps need to be...
@@ -40,7 +41,7 @@ Move 'displacementImporterData' folder and DisplacementImporter_2022.zsc to ZPlu
 
 
 #### MacOS
-coming soon
+Coming soon.
 
 
 ## Build
@@ -48,11 +49,18 @@ coming soon
 
 
 ## Credits
+This software uses the following libraries.
+
 [CLI11: Command line parser for C++11](https://github.com/CLIUtils/CLI11) / The 3-Clause BSD License / Henry Schreiner
 
 [tinyexr](https://github.com/syoyo/tinyexr) / The 3-Clause BSD License / Shoyo Fujita
 
 [libtiff](http://www.libtiff.org) / LibTIFF license / Copyright © 1988-1997 Sam Leffler / Copyright © 1991-1997 Silicon Graphics, Inc.  
 
+[objModifier](https://github.com/minoue/objModifier) / MIT License / Michitaka Inoue
 
 ## License
+[MIT License](./LICENSE)
+
+
+
