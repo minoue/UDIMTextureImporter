@@ -1,6 +1,6 @@
 # Displacement Importer for ZBrush
 
-UDIM normal/vector displacement importer
+UDIM Normal/Vector displacement importer
 
 
 https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8190-48a2260320f9.mp4
@@ -16,7 +16,8 @@ Displacement maps need to be...
 and exported in the follwing settings
 
 #### ZBrush
-* **Flip and switch 25**
+* **Flip and switch: 25**
+* **Tangent Flip and switch: 25**
 
 #### Mudbox
 * **Absolute tangent**
