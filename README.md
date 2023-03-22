@@ -5,6 +5,13 @@ UDIM Normal/Vector displacement importer
 
 https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8190-48a2260320f9.mp4
 
+## Notes:
+
+<span style="font-size: 120%; color: red; font-weight:bold">
+This early version may still have bugs. It is recommended to save the file under a different name and use a new layer.
+It is not guaranteed to work in all environments.
+</span>
+
 ## Requirements for maps
 Displacement maps need to be...
 
@@ -36,23 +43,16 @@ Move 'displacementImporterData' folder and DisplacementImporter_2022.zsc to ZPlu
 coming soon
 
 
-## Requirements to build
-* [objModifier](https://github.com/minoue/objModifier)
-* C++17 compiler
+## Build
+[How to build](./BUILD.md)
 
 
-## How to build
+## Credits
+[CLI11: Command line parser for C++11](https://github.com/CLIUtils/CLI11) / The 3-Clause BSD License / Henry Schreiner
 
-#### MacOS
-```
-cd src
-clang++ -dynamiclib -std=c++17 -current_version 1.0 -fvisibility=hidden -o displacementImporter.lib displacementImporter.cpp
-```
+[tinyexr](https://github.com/syoyo/tinyexr) / The 3-Clause BSD License / Shoyo Fujita
 
-#### Windows
-```
-mkdir build
-cd build
-cmake ../
-cmake --build . --config Release --target install
-```
+[libtiff](http://www.libtiff.org) / LibTIFF license / Copyright © 1988-1997 Sam Leffler / Copyright © 1991-1997 Silicon Graphics, Inc.  
+
+
+## License
