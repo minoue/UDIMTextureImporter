@@ -7,11 +7,11 @@
 
 ## How to build
 
-1. Build libtiff first.
-2. Build objModifier.
-3. Copy **objModifier.exe** and **tiff.dll** to DisplacementImporterData directory.
+1. Build and install libtiff.
+2. Build objModifier. This requires libtiff.
+3. Copy objModifier.exe to the DisplacementImporterData directory. You may also copy tiff.dll (libtiff.dylib) to DisplacementImporterData if you have built libtiff but do not want to install it to the system.
 4. Build displacementImporter
-5. Compile DisplacementImporter_2022.txt to zsc
+5. Compile DisplacementImporter_2022.txt to zsc and move it ZPlugs64 directory.
 
 #### MacOS
 ```
@@ -44,7 +44,7 @@ ZPlugs64/
 
 #### MacOS
 ```
-ZPlug64/
+ZPlugs64/
 ├─ DisplacementImporter_2022.zsc
 ├─ DisplacementImporterData/
 │  ├─ displacementImporter.lib

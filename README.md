@@ -24,14 +24,13 @@ Displacement maps need to be...
 and exported in the follwing settings
 
 #### ZBrush
-* **Flip and switch: 25**
-* **Tangent Flip and switch: 25**
+* Flip and switch: 25
+* Tangent Flip and switch: 25
 
 #### Mudbox
-* **Absolute tangent**
+* Absolute tangent
 
-
-No settings on the UI at the moment, so any maps which is not following the above settings will not work.
+**There are no settings on the UI to change the above settings at the moment. Therefore, any maps that do not follow these settings will not work.**
 
 ## Install
 
