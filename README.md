@@ -12,7 +12,6 @@ https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8
 **Because of a technical limitation, this plugin needs to export a temporary obj file and it may take some time if your mesh has more than a few million polygons. You might want to take a cup of tea or coffee.**
 
 
-
 ## Requirements for maps
 Displacement maps need to be...
 
@@ -21,7 +20,7 @@ Displacement maps need to be...
 * Mid point 0.0
 * named as UDIM, such as body.1001.tif
 
-and exported in the follwing settings
+and exported in the follwing settings for the tangent vector.
 
 #### ZBrush
 * Flip and switch: 25
@@ -34,12 +33,13 @@ and exported in the follwing settings
 
 ## Install
 
-#### Windows10
+#### Windows10 & ZBrush2022
 Download [zip](https://github.com/minoue/displacementImporter/releases/download/v0.1/DisplacementImporter_2022_win10.zip) file and extract it.
-Move 'displacementImporterData' folder and DisplacementImporter_2022.zsc to ZPlug64 directory.
+
+Move 'displacementImporterData' folder and DisplacementImporter_2022.zsc to the ZPlug64 directory.
 
 
-#### MacOS
+#### MacOS & ZBrush2022
 Coming soon.
 
 
