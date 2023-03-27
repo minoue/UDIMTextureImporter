@@ -76,9 +76,6 @@ float EXPORT ImportDisplacement(char* textFromZBrush,
     for (std::string& tex : texture_paths) {
         cmdstream << " " << tex;
     }
-#ifdef __APPLE__
-    cmdstream << " > " << pluginLog;
-#endif
     
     logOfs << cmdstream.str() << std::endl;
     logOfs.close();
