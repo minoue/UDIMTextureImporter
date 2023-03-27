@@ -23,9 +23,8 @@ else()
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
     set(PLUGIN_SUFFIX ".lib")
     set(TARGET_TYPE LIBRARY)
+    set(CMAKE_SHARED_LINKER_FLAGS "-dynamiclib, -current_version 1.0")
 endif()
-
-set(CMAKE_SHARED_LINKER_FLAGS "-dynamiclib, -current_version 1.0")
 
 set(INSTALL_DIR "../DisplacementImporterData")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
