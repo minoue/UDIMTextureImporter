@@ -7,19 +7,6 @@
 
 ## How to build
 
-1. Build and install libtiff.
-2. Build objModifier. This requires libtiff.
-3. Copy objModifier.exe to the DisplacementImporterData directory. You may also copy tiff.dll (libtiff.dylib) to DisplacementImporterData if you have built libtiff but do not want to install it to the system.
-4. Build displacementImporter
-5. Compile DisplacementImporter_2022.txt to zsc and move it ZPlugs64 directory.
-
-#### MacOS
-```
-cd src
-clang++ -dynamiclib -std=c++17 -current_version 1.0 -fvisibility=hidden -o displacementImporter.lib displacementImporter.cpp
-```
-
-#### Windows
 ```
 mkdir build
 cd build
@@ -27,10 +14,14 @@ cmake ../
 cmake --build . --config Release --target install
 ```
 
-## Folder Hierarchy
-The folder structure should look like this
+### Windows
+1. Build and install libtiff.
+2. Build objModifier. This requires libtiff.
+3. Copy objModifier.exe to the DisplacementImporterData directory. You may also copy tiff.dll to DisplacementImporterData if you have built libtiff but do not want to install it to the system.
+4. Build displacementImporter
+5. Compile DisplacementImporter_2022.txt to zsc and move it ZPlugs64 directory.
 
-#### Windows
+#### Folder Hierarchy
 ```
 ZPlugs64/
 ├─ DisplacementImporter_2022.zsc
@@ -42,7 +33,10 @@ ZPlugs64/
 │  │  ├─ ZFileUtils64.dll
 ```
 
-#### MacOS
+### MacOS
+wip
+
+#### Folder Hierarchy
 ```
 ZPlugs64/
 ├─ DisplacementImporter_2022.zsc
