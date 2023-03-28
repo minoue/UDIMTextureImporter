@@ -1,5 +1,4 @@
 .DS_Store
-ZFileUtils
 lib
 objModifier
 compile_flags.txt
@@ -8,7 +7,5 @@ compile_flags.txt
 *.obj
 *.ztl
 *.zsc
-*.lib
-*.dll
 ._*
 build
