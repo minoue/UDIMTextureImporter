@@ -1,6 +1,5 @@
 .DS_Store
 lib
-objModifier
 compile_flags.txt
 *.tif
 *.exr
