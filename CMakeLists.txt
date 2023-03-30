@@ -24,6 +24,7 @@ else()
     set(PLUGIN_SUFFIX ".lib")
     set(TARGET_TYPE LIBRARY)
     set(CMAKE_SHARED_LINKER_FLAGS "-dynamiclib, -current_version 1.0")
+    set(CMAKE_MACOSX_RPATH 1)
 endif()
 
 set(INSTALL_DIR "../DisplacementImporterData")
