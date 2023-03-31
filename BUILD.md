@@ -8,6 +8,9 @@
 ## How to build
 
 ```
+git clone https://github.com/minoue/displacementImporter
+cd displacementImporter
+git submodule update --init --recursive
 mkdir build
 cd build
 cmake ../
@@ -16,8 +19,7 @@ cmake --build . --config Release --target install
 
 ### Windows
 1. Build and install libtiff.
-2. Build objModifier. This requires libtiff.
-3. Copy objModifier.exe to the DisplacementImporterData directory. You may also copy tiff.dll to DisplacementImporterData if you have built libtiff but do not want to install it to the system.
+3. You may also copy tiff.dll to DisplacementImporterData if you have built libtiff but do not want to install it to the system.
 4. Build displacementImporter
 5. Compile DisplacementImporter_2022.txt to zsc and move it ZPlugs64 directory.
 
