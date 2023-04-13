@@ -5,9 +5,8 @@
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
 
-[VarDef, pluginPath, ""]
-[VarDef, objPathToDLL, ""]
-[VarDef, objPathFromDLL, ""]
+[VarDef, GoZPathToDLL, ""]
+[VarDef, GoZPathFromDLL, ""]
 
 [VarDef, dspMode, 1] // 1 = tangent by default, 0 = Normal
 
@@ -18,9 +17,8 @@
 	[VarSet, isMac, [ZBrushInfo, 6]]	// check Mac or PC
 	// Make sure we have the dll and set its path
 
-    [VarSet, pluginPath, [FileNameResolvePath, "ZBRUSH_ZSTARTUP/ZPlugs64/DisplacementImporterData/objModifier"]]
-    [VarSet, objPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.obj"]]
-    [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.obj"]]
+    [VarSet, GoZPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.GoZ"]]
+    [VarSet, GoZPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.GoZ"]]
 
     [If, isMac,
         // For release
@@ -53,8 +51,8 @@
     // If exists, good. do nothing
 
 	, // else no DLL.
-		[Note,"\Cff9923Note :\Cc0c0c0 The \Cff9923 DisplacementImporter plugin \CffffffDLL\Cc0c0c0 could not be found at the correct location.  Please re-install the plugin, making sure the relevant files and folders are in the \CffffffZStartup/ZPlugs\Cc0c0c0 folder."]
-		[Exit]
+    [Note,"\Cff9923Note :\Cc0c0c0 The \Cff9923 DisplacementImporter plugin \CffffffDLL\Cc0c0c0 could not be found at the correct location.  Please re-install the plugin, making sure the relevant files and folders are in the \CffffffZStartup/ZPlugs\Cc0c0c0 folder."]
+    [Exit]
 	]
 ]//end routine
 
@@ -106,12 +104,21 @@
             ,
         ]
 
-        // Export obj
-        [FileNameSetNext, objPathToDLL]
+        // Export GoZ file
+        [FileNameSetNext, GoZPathToDLL]
         [IPress, Tool:Export]
 
         // Cleanup
         [MemDelete, ZFileUTils_FileExt]
+
+        // Get current position
+        [VarDef, posX, 0]
+        [VarDef, posY, 0]
+        [VarDef, posZ, 0]
+        [VarSet, posX, [IGet,Tool:Geometry:X Position]]
+        [VarSet, posY, [IGet,Tool:Geometry:Y Position]]
+        [VarSet, posZ, [IGet,Tool:Geometry:Z Position]]
+        
 
         [if, fileCount > 0,
             [MemCreate, memTexturePaths, 256, 0] // to store single texture path
@@ -120,14 +127,6 @@
 
             [VarSet, index, 1]
             [VarSet, offset, 0]
-
-            // Append objModifier plugin path
-            [MemWriteString, memOutputPaths, [StrMerge, pluginPath, "#"], offset]
-            [VarSet, offset, offset + [StrLength, pluginPath] + 1]
-
-            // Append obj file path
-            [MemWriteString, memOutputPaths, [StrMerge, objPathToDLL, "#"], offset]
-            [VarSet, offset, offset + [StrLength, objPathToDLL] + 1]
 
             [Loop, fileCount,
                 [VarSet, err, [FileExecute, [Var, dllPath], GetFilePath, , index, memTexturePaths]]
@@ -146,7 +145,7 @@
             [VarSet, err, [FileExecute,
                             [Var, udimPluginPath],
                             "ImportDisplacement",
-                            objPathToDLL,
+                            GoZPathToDLL,
                             dspMode,
                             memOutputPaths,
                             memDllLog]]
@@ -168,12 +167,17 @@
         ] // End if fileCount
 
 
-        [FileNameSetNext, objPathFromDLL]
+        [FileNameSetNext, GoZPathFromDLL]
         [IPress,Tool:Import]
 
+        // Re-set position
+        [ISet, Tool:Geometry:X Position, [Var, posX]]
+        [ISet, Tool:Geometry:Y Position, [Var, posY]]
+        [ISet, Tool:Geometry:Z Position, [Var, posZ]]
+
         // Cleanup
-        [If, [FileExists, objPathFromDLL],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathFromDLL]] // Delete this file...
+        [If, [FileExists, GoZPathFromDLL],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #GoZPathFromDLL]] // Delete this file...
             [If, err,
                 [Note, "Failed to delete the sculpted mesh." , , 2]
             , //else OK
@@ -183,8 +187,8 @@
             // [Note, "No file to delete!" , , 2]
         ]
 
-        [If, [FileExists, objPathToDLL],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #objPathToDLL]] // Delete this file...
+        [If, [FileExists, GoZPathToDLL],
+            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #GoZPathToDLL]] // Delete this file...
             [If, err,
                 [Note, "Failed to delete the raw mesh." , , 2]
             , //else OK
@@ -194,7 +198,7 @@
             // [Note, "No file to delete!" , , 2]
         ]
         
-        [If, [FileExists, [StrMerge, "!:", [Var, objPathToDLL]]],
+        [If, [FileExists, [StrMerge, "!:", [Var, GoZPathToDLL]]],
             [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", [StrMerge, "!:", [Var, objPathToDLL]]]]
             [If, err,
                 [Note, "Failed to delete the raw mesh." , , 2]
