@@ -1,123 +1,83 @@
 #include <cstdlib>
 #include <cstring>
+#include <filesystem>
 #include <fstream>
-#include <string>
-#include <vector>
 #include <iostream>
 #include <sstream>
-#include <filesystem>
+#include <string>
+#include <vector>
 
 #include "displacementImporter.hpp"
+#include "goz.hpp"
 
-
-float EXPORT ImportDisplacement(char* textFromZBrush,
-                                      double dspMode,
-                                      char* pOptBuffer1,
-                                      int optBuffer1Size,
-                                      char* pOptBuffer2,
-                                      int optBuffer2Size,
-                                      char** zData)
+float EXPORT ImportDisplacement(char* GoZFilePath,
+    double dspMode,
+    char* pOptBuffer1,
+    int optBuffer1Size,
+    char* pOptBuffer2,
+    int optBuffer2Size,
+    char** zData)
 {
-    std::vector<std::string> cmdVector;
-    std::string cmdString(pOptBuffer1);
+    std::string GoZPathStr(GoZFilePath);
+    GoZPathStr.erase(0, 2);
+    std::filesystem::path gozPath(GoZPathStr);
+    std::cout << gozPath.string() << std::endl;
+    if (std::filesystem::exists(gozPath)) {
+        std::cout << "file exists" << std::endl;
+    } else {
+        std::cout << "file not exists" << std::endl;
+        return 1.0;
+    }
 
-    int mode = static_cast<int>(dspMode);
-    int cmdLength = static_cast<int>(cmdString.length());
+    std::vector<std::string> texture_paths;
+    std::string pathArray(pOptBuffer1);
+    // int mode = static_cast<int>(dspMode);
+    int pathArrayLength = static_cast<int>(pathArray.length());
 
-    // Split/Convert command strings
+    // Split/Convert texture path strings
     std::string path;
-    for (int i = 0; i < cmdLength; i++) {
+    for (int i = 0; i < pathArrayLength; i++) {
         const char c = pOptBuffer1[i];
         if (c == '#') {
-            cmdVector.push_back(path);
+            texture_paths.push_back(path);
             path.clear();
         } else {
             path.push_back(c);
         }
     }
 
-    // Init paths
-    std::string objModifierPath = cmdVector[0];
-    std::string objFilePath = cmdVector[1];
+    GoZ obj;
+    obj.read(gozPath.string());
+    obj.displacement(texture_paths);
 
-    objModifierPath.erase(0, 2);
-    objFilePath.erase(0, 2);
+    gozPath.replace_filename("dspImporter_from_DLL.GoZ");
+    std::cout << gozPath.string() << std::endl;
 
-#ifdef _WIN32
-    objModifierPath.insert(0, "\"C:");
-    objFilePath.insert(0, "C:");
-#else // MacOS
-    objModifierPath.insert(0, "\"");
-#endif
-    objModifierPath.append("\"");
-
-    std::vector<std::string> texture_paths(cmdVector.begin() + 2, cmdVector.end());
-
-    // log path
-    std::filesystem::path cmdLog = objFilePath;
-    cmdLog.replace_filename("dspImporter.log");
-    std::filesystem::path pluginLog = objFilePath;
-    pluginLog.replace_filename("objModifier.log");
-
-    std::ofstream logOfs(cmdLog, std::ios::out);
-    if (!logOfs) {
-        strcpy(pOptBuffer2, "Failed to open the log file.");
-        return 1.0;
-    } 
-
-    // Run command setup
-    std::stringstream cmdstream;
-    cmdstream << objModifierPath << " -i " << objFilePath << " -o dspImporter_from_DLL";
-    if (mode == 0) {
-        // Normal displacement
-        cmdstream << " -n";
-    }
-    cmdstream << " -t";
-    for (std::string& tex : texture_paths) {
-        cmdstream << " " << tex;
-    }
-    
-    logOfs << cmdstream.str() << std::endl;
-    logOfs.close();
-    
-    auto ret = system(nullptr);
-    if (ret == 0) {
-        strcpy(pOptBuffer2, "Shell not available");
-        return 1.0;
-    }
-
-    int r = system(cmdstream.str().c_str());
-    if (r != 0) {
-        // not successful
-        strcpy(pOptBuffer2, "Failed to run the plugin command. Check the log.");
-        return 1.0;
-    }
+    obj.write(gozPath.string());
 
     return 0.0f;
 }
 
-
 #ifdef _WIN32
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-    switch (fdwReason)
-    {
-        case DLL_PROCESS_ATTACH:
-            // attach to process
-            // return FALSE to fail DLL load
-            break;
+    switch (fdwReason) {
+    case DLL_PROCESS_ATTACH:
+        // attach to process
+        // return FALSE to fail DLL load
+        break;
 
-        case DLL_PROCESS_DETACH:
-            // detach from process
-            break;
+    case DLL_PROCESS_DETACH:
+        // detach from process
+        break;
 
-        case DLL_THREAD_ATTACH:
-            // attach to thread
-            break;
+    case DLL_THREAD_ATTACH:
+        // attach to thread
+        break;
 
-        case DLL_THREAD_DETACH:
-            // detach from thread
-            break;
+    case DLL_THREAD_DETACH:
+        // detach from thread
+        break;
     }
     return TRUE; // succesful
 }
