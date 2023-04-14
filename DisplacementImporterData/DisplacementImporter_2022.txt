@@ -8,7 +8,12 @@
 [VarDef, GoZPathToDLL, ""]
 [VarDef, GoZPathFromDLL, ""]
 
-[VarDef, dspMode, 1] // 1 = tangent by default, 0 = Normal
+// Import model
+// 0 : Disabled
+// 1 : Tangent Vector
+// 2 : Normal
+// 3 : Color
+[VarDef, mode, 1]
 
 
 [RoutineDef, CheckSystem,
@@ -68,28 +73,69 @@
 
 [ISubPalette,"ZPlugin:Displacement Importer"]
        
-// [ISwitch, "ZPlugin:Displacement Importer:test", 1, "Info text", [MessageOK, On], [MessageOK, Off]]
-
 [ISwitch,
     "ZPlugin:Displacement Importer:Tangent Vector",
     1,
-    "Tangent Vector ON",
-    // Commands group to execute when button is pressed
-    [VarSet, dspMode, 1]
+    "Switch 1",
+    // on command
+    [IUnPress, "ZPlugin:Displacement Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:Displacement Importer:Vertex Color"]
+    [VarSet, mode, 1]
     ,
-    // Commands group to execute when button is unpressed
-    [VarSet, dspMode, 0]
+    // off command
+    [VarSet, mode, 0]
     ,
-    0
+    0, // Initially disabled?
+    150, // Width
+    25, // Height
+    ]
+[IEnable, "ZPlugin:Displacement Importer:Tangent Vector"]
+
+[ISwitch,
+    "ZPlugin:Displacement Importer:Normal Vector",
+    0,
+    "Switch 1",
+    // on command
+    [IUnPress, "ZPlugin:Displacement Importer:Tangent Vector"]
+    [IUnPress, "ZPlugin:Displacement Importer:Vertex Color"]
+    [VarSet, mode, 2]
     ,
-    1
+    // off command
+    [VarSet, mode, 0]
     ,
-    0
-] 
+    0, // Initially disabled?
+    150, // Width
+    25, // Height
+    ]
+[IEnable, "ZPlugin:Displacement Importer:Normal Vector"]
+
+[ISwitch,
+    "ZPlugin:Displacement Importer:Vertex Color",
+    0,
+    "Switch 1",
+    // on command
+    [IUnPress, "ZPlugin:Displacement Importer:Tangent Vector"]
+    [IUnPress, "ZPlugin:Displacement Importer:Normal Vector"]
+    [VarSet, mode, 3]
+    ,
+    // off command
+    [VarSet, mode, 0]
+    ,
+    0, // Initially disabled?
+    150, // Width
+    25, // Height
+    ]
+[IEnable, "ZPlugin:Displacement Importer:Vertex Color"]
 
 [IButton,
-    "ZPlugin:Displacement Importer:Import Displacement", // Button name
-    "Import Displacement", // Popup info text
+    "ZPlugin:Displacement Importer:Import UDIM", // Button name
+    "Import UDIM Textures", // Popup info text
+        
+        [If, mode == 0,
+            [Note, "Select Import mode. Aborted"]
+            [Exit]
+            ,
+        ]
 
         [VarDef, dialogTitle, "Please select image files"]
         [VarSet, fileExt, "tif,tiff,exr"]
@@ -146,7 +192,7 @@
                             [Var, udimPluginPath],
                             "ImportDisplacement",
                             GoZPathToDLL,
-                            dspMode,
+                            mode,
                             memOutputPaths,
                             memDllLog]]
             [If, err,
