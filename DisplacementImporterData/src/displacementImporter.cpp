@@ -22,6 +22,7 @@ float EXPORT ImportDisplacement(char* GoZFilePath,
     GoZPathStr.erase(0, 2);
     std::filesystem::path gozPath(GoZPathStr);
     std::cout << gozPath.string() << std::endl;
+
     if (std::filesystem::exists(gozPath)) {
         std::cout << "file exists" << std::endl;
     } else {
@@ -31,7 +32,7 @@ float EXPORT ImportDisplacement(char* GoZFilePath,
 
     std::vector<std::string> texture_paths;
     std::string pathArray(pOptBuffer1);
-    // int mode = static_cast<int>(dspMode);
+    int mode = static_cast<int>(dspMode);
     int pathArrayLength = static_cast<int>(pathArray.length());
 
     // Split/Convert texture path strings
@@ -48,7 +49,23 @@ float EXPORT ImportDisplacement(char* GoZFilePath,
 
     GoZ obj;
     obj.read(gozPath.string());
-    obj.displacement(texture_paths);
+
+    if (mode == 1) {
+        // Vector Displacement
+        obj.displacement(texture_paths);
+    } else if (mode == 2) {
+        // Normal Displacement
+        strcpy(pOptBuffer2, "Normal Displacement Import is not supported yet.");
+        return 1.0;
+    } else if (mode == 3) {
+        // Vertex color
+        strcpy(pOptBuffer2, "Vertex Color Import is not supported yet.");
+        return 1.0;
+    } else {
+        // Not supported
+        strcpy(pOptBuffer2, "Invalid mode number");
+        return 1.0;
+    }
 
     gozPath.replace_filename("dspImporter_from_DLL.GoZ");
     std::cout << gozPath.string() << std::endl;
