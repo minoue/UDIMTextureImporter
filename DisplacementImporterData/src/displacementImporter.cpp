@@ -52,15 +52,14 @@ float EXPORT ImportDisplacement(char* GoZFilePath,
 
     if (mode == 1) {
         // Vector Displacement
-        obj.displacement(texture_paths);
+        obj.importVectorDisplacement(texture_paths);
     } else if (mode == 2) {
         // Normal Displacement
-        strcpy(pOptBuffer2, "Normal Displacement Import is not supported yet.");
+        obj.importNormalDisplacement(texture_paths);
         return 1.0;
     } else if (mode == 3) {
         // Vertex color
         strcpy(pOptBuffer2, "Vertex Color Import is not supported yet.");
-        return 1.0;
     } else {
         // Not supported
         strcpy(pOptBuffer2, "Invalid mode number");

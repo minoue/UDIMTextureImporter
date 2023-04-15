@@ -15,7 +15,9 @@ public:
 
     void read(std::string inputPath);
     void write(std::string outPath);
-    void displacement(std::vector<std::string>& texture_paths);
+    void importVectorDisplacement(std::vector<std::string>& texture_paths);
+    void importNormalDisplacement(std::vector<std::string>& texture_paths);
+    void importVertexColor(std::vector<std::string>& texture_paths);
 
 private:
     std::string name;

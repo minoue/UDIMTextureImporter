@@ -1,8 +1,8 @@
 #include "fromZ/readGoZFile.h"
 #include "fromZ/writeGoZFile.h"
 
-#include "image.hpp"
 #include "goz.hpp"
+#include "image.hpp"
 #include "util.hpp"
 
 GoZ::GoZ() {};
@@ -116,7 +116,7 @@ void GoZ::computeTangentBasis(const Vector3f& A,
     U = bitangent.normalized();
 }
 
-void GoZ::displacement(std::vector<std::string>& texture_paths)
+void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
 {
 
     // Find out the last number of the UDIM images
@@ -229,6 +229,86 @@ void GoZ::displacement(std::vector<std::string>& texture_paths)
             Vector3f new_pp = P0 + displace;
             std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
             outVertices[static_cast<size_t>(currentVertexID)] = xyz;
+        }
+    }
+    this->vertices = outVertices;
+}
+
+void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
+{
+
+    // Find out the last number of the UDIM images
+    int max_udim = 0;
+    for (auto& path : texture_paths) {
+        std::string texture_udim = Utils::pathGetUdim(path);
+        int udim = std::stoi(texture_udim) - 1000;
+        if (udim > max_udim) {
+            max_udim = udim;
+        }
+    }
+    // Init texture data by the number of udim textures
+    std::vector<Image> textures;
+    textures.resize(static_cast<size_t>(max_udim));
+    for (auto& path : texture_paths) {
+        Image img(path);
+        std::string texture_udim = Utils::pathGetUdim(path);
+        int udim = stoi(texture_udim) - 1000;
+        textures[static_cast<size_t>(udim - 1)] = img;
+    }
+
+    // Vector Displacement
+    std::vector<std::vector<float>> outVertices;
+    outVertices.resize(this->vertices.size());
+
+    size_t numFaces = this->faces.size();
+    for (size_t i = 0; i < numFaces; i++) {
+        std::vector<int>& faceVertices = this->faces[i];
+        std::vector<std::pair<float, float>>& faceUVs = this->UVs[i];
+
+        size_t numFaceVertices = faceVertices.size();
+
+        for (size_t j = 0; j < numFaceVertices; j++) {
+
+            int vertexID = faceVertices[j];
+            std::vector<float>& P = this->vertices[static_cast<size_t>(vertexID)];
+
+            Vector3f uv;
+            uv << faceUVs[j].first, faceUVs[j].second, 0.0;
+
+            Vector3f P0(P.data());
+
+            Vector3f N;
+            N = this->normals[static_cast<size_t>(vertexID)];
+            N.normalize();
+
+            float u = uv.x();
+            float v = uv.y();
+
+            size_t udim = ImageUtils::get_udim(u, v);
+
+            Vector3f rgb;
+
+            if (udim > textures.size()) {
+                // If UVs are outside of the given UDIM range, use same point
+                rgb << 0, 0, 0;
+            } else {
+                Image& img = textures[udim - 1];
+                if (img.isEmpty) {
+                    // If UVs are within the given UDIM range but has no textures, use same point
+                    rgb << 0, 0, 0;
+                } else {
+                    int width = img.width;
+                    int height = img.height;
+                    int channels = img.nchannels;
+
+                    Vector2f local_uv = ImageUtils::localize_uv(u, v);
+                    Vector3f rgb;
+                    rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
+                }
+            }
+            Vector3f new_pp = P0 + (N * rgb.x());
+            std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
+            outVertices[static_cast<size_t>(vertexID)] = xyz;
         }
     }
     this->vertices = outVertices;
