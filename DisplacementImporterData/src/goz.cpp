@@ -1,5 +1,5 @@
-#include "fromZ/readGoZFile.h"
-#include "fromZ/writeGoZFile.h"
+#include "FromZ/src/readGoZFile.h"
+#include "FromZ/src/writeGoZFile.h"
 
 #include "goz.hpp"
 #include "util.hpp"
