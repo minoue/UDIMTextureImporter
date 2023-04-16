@@ -1,3 +1,6 @@
 [submodule "DisplacementImporterData/src/FromZ"]
 	path = DisplacementImporterData/src/FromZ
 	url = https://github.com/n-taka/FromZ
+[submodule "DisplacementImporterData/src/eigen"]
+	path = DisplacementImporterData/src/eigen
+	url = https://gitlab.com/libeigen/eigen

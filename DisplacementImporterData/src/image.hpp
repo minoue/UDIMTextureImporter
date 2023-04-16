@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Eigen/Core"
-#include "Eigen/Dense"
-#include "Eigen/LU"
+#include "eigen/Eigen/Core"
+#include "eigen/Eigen/Dense"
+#include "eigen/Eigen/LU"
 #include "tiffio.hxx"
 #include <vector>
 

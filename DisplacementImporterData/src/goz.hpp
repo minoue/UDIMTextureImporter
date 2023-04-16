@@ -3,9 +3,6 @@
 #include <string>
 #include <vector>
 #include "image.hpp"
-#include "Eigen/Core"
-#include "Eigen/Dense"
-#include "Eigen/LU"
 
 using namespace Eigen;
 
