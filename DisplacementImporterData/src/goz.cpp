@@ -2,7 +2,6 @@
 #include "fromZ/writeGoZFile.h"
 
 #include "goz.hpp"
-#include "image.hpp"
 #include "util.hpp"
 
 GoZ::GoZ() {};
@@ -116,9 +115,8 @@ void GoZ::computeTangentBasis(const Vector3f& A,
     U = bitangent.normalized();
 }
 
-void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
+std::vector<Image> GoZ::initTextures(std::vector<std::string>& texture_paths)
 {
-
     // Find out the last number of the UDIM images
     int max_udim = 0;
     for (auto& path : texture_paths) {
@@ -128,6 +126,7 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
             max_udim = udim;
         }
     }
+
     // Init texture data by the number of udim textures
     std::vector<Image> textures;
     textures.resize(static_cast<size_t>(max_udim));
@@ -137,6 +136,13 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
         int udim = stoi(texture_udim) - 1000;
         textures[static_cast<size_t>(udim - 1)] = img;
     }
+    return textures;
+}
+
+void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
+{
+
+    std::vector<Image> textures = initTextures(texture_paths);
 
     // Vector Displacement
     std::vector<std::vector<float>> outVertices;
@@ -237,24 +243,7 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
 void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
 {
 
-    // Find out the last number of the UDIM images
-    int max_udim = 0;
-    for (auto& path : texture_paths) {
-        std::string texture_udim = Utils::pathGetUdim(path);
-        int udim = std::stoi(texture_udim) - 1000;
-        if (udim > max_udim) {
-            max_udim = udim;
-        }
-    }
-    // Init texture data by the number of udim textures
-    std::vector<Image> textures;
-    textures.resize(static_cast<size_t>(max_udim));
-    for (auto& path : texture_paths) {
-        Image img(path);
-        std::string texture_udim = Utils::pathGetUdim(path);
-        int udim = stoi(texture_udim) - 1000;
-        textures[static_cast<size_t>(udim - 1)] = img;
-    }
+    std::vector<Image> textures = initTextures(texture_paths);
 
     // Vector Displacement
     std::vector<std::vector<float>> outVertices;

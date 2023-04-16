@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "image.hpp"
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include "Eigen/LU"
@@ -29,6 +30,7 @@ private:
     std::vector<std::vector<std::pair<float, float>>> UVs;
     std::vector<Vector3f> normals;
 
+    std::vector<Image> initTextures(std::vector<std::string>& texture_paths);
     void computeVertexNormals();
     void computeTangentBasis(const Vector3f& A,
         const Vector3f& B,
