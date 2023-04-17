@@ -68,6 +68,7 @@ void Image::loadTif(const std::string& path)
     uint32_t width;
     uint32_t height;
     uint16_t nc;
+    uint16_t bitDepth;
 
     std::cout << "Loading tif :" << path << std::endl;
 
@@ -78,6 +79,7 @@ void Image::loadTif(const std::string& path)
         TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
         TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
         TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &nc);
+        TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitDepth);
 
         this->nchannels = static_cast<int>(nc);
         this->width = static_cast<int>(width);
@@ -89,10 +91,26 @@ void Image::loadTif(const std::string& path)
         for (uint32_t row = 0; row < height; row++) {
             TIFFReadScanline(tif, buf, row);
             for (uint32_t col = 0; col < width; col++) {
-                float r = static_cast<float*>(buf)[col * nc + 0];
-                float g = static_cast<float*>(buf)[col * nc + 1];
-                float b = static_cast<float*>(buf)[col * nc + 2];
-
+                float r, g, b;
+                if (bitDepth == 32) {
+                    r = static_cast<float*>(buf)[col * nc + 0];
+                    g = static_cast<float*>(buf)[col * nc + 1];
+                    b = static_cast<float*>(buf)[col * nc + 2];
+                } else if (bitDepth == 16) {
+                    uint16_t R = static_cast<uint16_t*>(buf)[col * nc + 0];
+                    uint16_t G = static_cast<uint16_t*>(buf)[col * nc + 1];
+                    uint16_t B = static_cast<uint16_t*>(buf)[col * nc + 2];
+                    r = static_cast<float>(R) / static_cast<float>(65535.0);
+                    g = static_cast<float>(G) / static_cast<float>(65535.0);
+                    b = static_cast<float>(B) / static_cast<float>(65535.0);
+                } else {
+                    uint16_t R = static_cast<uint8_t*>(buf)[col * nc + 0];
+                    uint16_t G = static_cast<uint8_t*>(buf)[col * nc + 1];
+                    uint16_t B = static_cast<uint8_t*>(buf)[col * nc + 2];
+                    r = static_cast<float>(R) / static_cast<float>(255.0);
+                    g = static_cast<float>(G) / static_cast<float>(255.0);
+                    b = static_cast<float>(B) / static_cast<float>(255.0);
+                }
                 this->pixels.push_back(r);
                 this->pixels.push_back(g);
                 this->pixels.push_back(b);

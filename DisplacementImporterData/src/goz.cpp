@@ -302,3 +302,65 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
     }
     this->vertices = outVertices;
 }
+
+void GoZ::importVertexColor(std::vector<std::string>& texture_paths)
+{
+
+    std::vector<Image> textures = initTextures(texture_paths);
+
+    // Vertex Color
+    std::vector<std::vector<float>> outColor;
+    outColor.resize(this->vertices.size());
+
+    size_t numFaces = this->faces.size();
+    for (size_t i = 0; i < numFaces; i++) {
+        std::vector<int>& faceVertices = this->faces[i];
+        std::vector<std::pair<float, float>>& faceUVs = this->UVs[i];
+
+        size_t numFaceVertices = faceVertices.size();
+
+        for (size_t j = 0; j < numFaceVertices; j++) {
+
+            int vertexID = faceVertices[j];
+            std::vector<float>& P = this->vertices[static_cast<size_t>(vertexID)];
+
+            Vector3f uv;
+            uv << faceUVs[j].first, faceUVs[j].second, 0.0;
+
+            Vector3f P0(P.data());
+
+            Vector3f N;
+            N = this->normals[static_cast<size_t>(vertexID)];
+            N.normalize();
+
+            float u = uv.x();
+            float v = uv.y();
+
+            size_t udim = ImageUtils::get_udim(u, v);
+
+            Vector3f rgb;
+
+            if (udim > textures.size()) {
+                // If UVs are outside of the given UDIM range, use same point
+                rgb << 0, 0, 0;
+            } else {
+                Image& img = textures[udim - 1];
+                if (img.isEmpty) {
+                    // If UVs are within the given UDIM range but has no textures, use same point
+                    rgb << 0, 0, 0;
+                } else {
+                    int width = img.width;
+                    int height = img.height;
+                    int channels = img.nchannels;
+
+                    Vector2f local_uv = ImageUtils::localize_uv(u, v);
+                    rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
+                }
+            }
+            float alpha = 1.0;
+            std::vector<float> col = { rgb.x(), rgb.y(), rgb.z(), alpha };
+            outColor[static_cast<size_t>(vertexID)] = col;
+        }
+    }
+    this->vertexColor = outColor;
+}
