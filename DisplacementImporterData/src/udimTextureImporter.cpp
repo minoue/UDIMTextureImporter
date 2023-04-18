@@ -7,10 +7,10 @@
 #include <string>
 #include <vector>
 
-#include "displacementImporter.hpp"
+#include "udimTextureImporter.hpp"
 #include "goz.hpp"
 
-float EXPORT ImportDisplacement(char* GoZFilePath,
+float EXPORT ImportUDIM(char* GoZFilePath,
     double dspMode,
     char* pOptBuffer1,
     int optBuffer1Size,

@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-float EXPORT ImportDisplacement(char* textFromZBrush,
+float EXPORT ImportUDIM(char* textFromZBrush,
     double dspMode,
     char* pOptBuffer1,
     int optBuffer1Size,
