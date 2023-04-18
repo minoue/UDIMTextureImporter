@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
-project(displacementImporter)
+project(UDIMTexrtureImporter)
 
 set(SOURCE_FILES
-    src/displacementImporter.cpp
+    src/udimTextureImporter.cpp
 )
 set(CMAKE_CXX_STANDARD 17)
 
@@ -25,6 +25,6 @@ else()
     set(CMAKE_MACOSX_RPATH 1)
 endif()
 
-set(INSTALL_DIR "../DisplacementImporterData")
+set(INSTALL_DIR "../UDIMTextureImporterData")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ${PLUGIN_SUFFIX})
