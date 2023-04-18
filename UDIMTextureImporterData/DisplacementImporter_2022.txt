@@ -27,12 +27,12 @@
 
     [If, isMac,
         // For release
-        [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/DisplacementImporterData/ZFileUtils/ZFileUtils.lib"]
-        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/DisplacementImporterData/displacementImporter.lib"]
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMTextureImporterData/ZFileUtils/ZFileUtils.lib"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP/ZPlugs64/UDIMTextureImporterData/UDIMTextureImporter.lib"]
 
     , // else, Windows
-        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\DisplacementImporterData\ZFileUtils\ZFileUtils64.dll"]
-        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\DisplacementImporterData\displacementImporter.dll"]
+        [VarSet, dllPath, "ZBRUSH_ZSTARTUP\ZPlugs64\UDIMTextureImporterData\ZFileUtils\ZFileUtils64.dll"]
+        [VarSet, udimPluginPath, "ZBRUSH_ZSTARTUP\ZPlugs64\UDIMTextureImporterData\UDIMTextureImporter.dll"]
     ]
 
     // Check ZFileUtils
