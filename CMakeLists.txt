@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.13)
-project(displacementImporter)
+project(UDIMTextureImporter)
 
 set(SOURCE_FILES
-    ../DisplacementImporterData/src/displacementImporter.cpp
-    ../DisplacementImporterData/src/goz.cpp
-    ../DisplacementImporterData/src/util.cpp
-    ../DisplacementImporterData/src/image.cpp
-    ../DisplacementImporterData/src/timer.cpp
+    ../UDIMTextureImporterData/src/udimTextureImporter.cpp
+    ../UDIMTextureImporterData/src/goz.cpp
+    ../UDIMTextureImporterData/src/util.cpp
+    ../UDIMTextureImporterData/src/image.cpp
+    ../UDIMTextureImporterData/src/timer.cpp
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -52,7 +52,7 @@ else ()
     link_directories(${TIFF_LIB_DIR})
 endif()
 
-set(INSTALL_DIR "../DisplacementImporterData")
+set(INSTALL_DIR "../UDIMTextureImporterData")
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ${PLUGIN_SUFFIX})
@@ -62,8 +62,8 @@ else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE tiff)
 endif()
 
-install(TARGETS "displacementImporter"
-        RUNTIME DESTINATION ../DisplacementImporterData
-        LIBRARY DESTINATION ../DisplacementImporterData)
+install(TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION ../UDIMTextureImporterData
+        LIBRARY DESTINATION ../UDIMTextureImporterData)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
