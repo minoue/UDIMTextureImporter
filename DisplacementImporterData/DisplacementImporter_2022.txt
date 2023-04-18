@@ -71,15 +71,15 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-[ISubPalette,"ZPlugin:Displacement Importer"]
+[ISubPalette,"ZPlugin:UDIM Texture Importer"]
        
 [ISwitch,
-    "ZPlugin:Displacement Importer:Tangent Vector",
+    "ZPlugin:UDIM Texture Importer:Tangent Vector",
     1,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:Displacement Importer:Normal Vector"]
-    [IUnPress, "ZPlugin:Displacement Importer:Vertex Color"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [VarSet, mode, 1]
     ,
     // off command
@@ -89,15 +89,15 @@
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:Displacement Importer:Tangent Vector"]
+[IEnable, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
 
 [ISwitch,
-    "ZPlugin:Displacement Importer:Normal Vector",
+    "ZPlugin:UDIM Texture Importer:Normal Vector",
     0,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:Displacement Importer:Tangent Vector"]
-    [IUnPress, "ZPlugin:Displacement Importer:Vertex Color"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [VarSet, mode, 2]
     ,
     // off command
@@ -107,15 +107,15 @@
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:Displacement Importer:Normal Vector"]
+[IEnable, "ZPlugin:UDIM Texture Importer:Normal Vector"]
 
 [ISwitch,
-    "ZPlugin:Displacement Importer:Vertex Color",
+    "ZPlugin:UDIM Texture Importer:Vertex Color",
     0,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:Displacement Importer:Tangent Vector"]
-    [IUnPress, "ZPlugin:Displacement Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
     [VarSet, mode, 3]
     ,
     // off command
@@ -125,10 +125,10 @@
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:Displacement Importer:Vertex Color"]
+[IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
 
 [IButton,
-    "ZPlugin:Displacement Importer:Import UDIM", // Button name
+    "ZPlugin:UDIM Texture Importer:Import UDIM Textures", // Button name
     "Import UDIM Textures", // Popup info text
         
         [If, mode == 0,
@@ -190,7 +190,7 @@
 
             [VarSet, err, [FileExecute,
                             [Var, udimPluginPath],
-                            "ImportDisplacement",
+                            "ImportUDIM",
                             GoZPathToDLL,
                             mode,
                             memOutputPaths,
