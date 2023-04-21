@@ -59,6 +59,8 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     } else if (mode == 3) {
         // Vertex color
         obj.importVertexColor(texture_paths);
+    } else if (mode == 4) {
+        obj.importMask(texture_paths);
     } else {
         // Not supported
         strcpy(pOptBuffer2, "Invalid mode number");

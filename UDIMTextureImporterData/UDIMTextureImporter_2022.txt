@@ -13,6 +13,7 @@
 // 1 : Tangent Vector
 // 2 : Normal
 // 3 : Color
+// 4 : Mask
 [VarDef, mode, 1]
 
 
@@ -80,6 +81,7 @@
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 1]
     ,
     // off command
@@ -98,6 +100,7 @@
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 2]
     ,
     // off command
@@ -116,6 +119,7 @@
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 3]
     ,
     // off command
@@ -126,6 +130,25 @@
     25, // Height
     ]
 [IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+
+[ISwitch,
+    "ZPlugin:UDIM Texture Importer:Mask",
+    0,
+    "Switch 1",
+    // on command
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+    [VarSet, mode, 4]
+    ,
+    // off command
+    [VarSet, mode, 0]
+    ,
+    0, // Initially disabled?
+    150, // Width
+    25, // Height
+    ]
+[IEnable, "ZPlugin:UDIM Texture Importer:Mask"]
 
 [IButton,
     "ZPlugin:UDIM Texture Importer:Import UDIM Textures", // Button name
