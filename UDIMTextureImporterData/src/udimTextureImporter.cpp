@@ -47,6 +47,20 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         }
     }
 
+    std::filesystem::path logPath = gozPath.string();
+    logPath.replace_extension("log");
+
+    std::ofstream logOfs(logPath, std::ios::out);
+    if (!logOfs) {
+        strcpy(pOptBuffer2, "Failed to open the log file.");
+        return 1.0;
+    }
+
+    // Redirect all cout to log file
+    // https://www.quora.com/How-do-I-output-all-my-cout-s-to-a-text-file-in-C
+    auto cout_buff = std::cout.rdbuf();
+    std::cout.rdbuf(logOfs.rdbuf());
+
     GoZ obj;
     obj.read(gozPath.string());
 
@@ -68,9 +82,14 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     }
 
     gozPath.replace_filename("dspImporter_from_DLL.GoZ");
-    std::cout << gozPath.string() << std::endl;
+    std::cout << "GoZ output path: " << gozPath.string() << std::endl;
 
     obj.write(gozPath.string());
+
+    logOfs << "End dll" << std::endl;
+    logOfs.close();
+
+    std::cout.rdbuf(cout_buff);
 
     return 0.0f;
 }
