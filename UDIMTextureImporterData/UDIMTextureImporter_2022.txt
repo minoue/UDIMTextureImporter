@@ -191,7 +191,7 @@
 
         [if, fileCount > 0,
             [MemCreate, memTexturePaths, 256, 0] // to store single texture path
-            [MemCreate, memOutputPaths, 2048, 0]
+            [MemCreate, memOutputPaths, 32768, 0]
             [MemCreate, memDllLog, 256, 0]
 
             [VarSet, index, 1]
@@ -219,7 +219,7 @@
                             memOutputPaths,
                             memDllLog]]
             [If, err,
-                // [Note, "An error has occured"]
+                [Note, "An error has occured"]
                 [MemReadString, memDllLog, dllLog]
                 [Note, [Var, dllLog]]
                 [MemDelete, memTexturePaths]
