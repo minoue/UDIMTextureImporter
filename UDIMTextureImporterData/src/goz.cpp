@@ -365,7 +365,6 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths)
     this->vertexColor = outColor;
 }
 
-
 void GoZ::importMask(std::vector<std::string>& texture_paths)
 {
 

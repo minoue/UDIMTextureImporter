@@ -7,9 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "udimTextureImporter.hpp"
 #include "goz.hpp"
-
+#include "udimTextureImporter.hpp"
 
 float EXPORT ImportUDIM(char* GoZFilePath,
     double dspMode,
@@ -37,7 +36,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         strcpy(pOptBuffer2, message.c_str());
         return 1.0;
     }
-    
+
     std::filesystem::path logPath = gozPath.string();
     logPath.replace_extension("log");
 
