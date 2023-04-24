@@ -10,6 +10,7 @@
 #include "udimTextureImporter.hpp"
 #include "goz.hpp"
 
+
 float EXPORT ImportUDIM(char* GoZFilePath,
     double dspMode,
     char* pOptBuffer1,
@@ -19,16 +20,36 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     char** zData)
 {
     std::string GoZPathStr(GoZFilePath);
-    GoZPathStr.erase(0, 2);
-    std::filesystem::path gozPath(GoZPathStr);
-    std::cout << gozPath.string() << std::endl;
 
-    if (std::filesystem::exists(gozPath)) {
-        std::cout << "file exists" << std::endl;
-    } else {
-        std::cout << "file not exists" << std::endl;
+    // If a path from zscript starts with '!:u', delete them.
+    if (GoZPathStr.c_str()[0] == '!') {
+        GoZPathStr.erase(0, 2);
+    }
+
+    std::filesystem::path gozPath(GoZPathStr);
+
+    // Check if GoZ file exists
+    bool gozFileExist = std::filesystem::exists(gozPath);
+    if (!gozFileExist) {
+        std::string message;
+        message = "Cannot find GoZ file : ";
+        message.append(gozPath.string());
+        strcpy(pOptBuffer2, message.c_str());
         return 1.0;
     }
+    
+    std::filesystem::path logPath = gozPath.string();
+    logPath.replace_extension("log");
+
+    std::ofstream logOfs(logPath, std::ios::out);
+    if (!logOfs) {
+        strcpy(pOptBuffer2, "Failed to open the log file.");
+        return 1.0;
+    }
+    // Redirect all cout to log file
+    // https://www.quora.com/How-do-I-output-all-my-cout-s-to-a-text-file-in-C
+    auto cout_buff = std::cout.rdbuf();
+    std::cout.rdbuf(logOfs.rdbuf());
 
     std::vector<std::string> texture_paths;
     std::string pathArray(pOptBuffer1);
@@ -46,20 +67,6 @@ float EXPORT ImportUDIM(char* GoZFilePath,
             path.push_back(c);
         }
     }
-
-    std::filesystem::path logPath = gozPath.string();
-    logPath.replace_extension("log");
-
-    std::ofstream logOfs(logPath, std::ios::out);
-    if (!logOfs) {
-        strcpy(pOptBuffer2, "Failed to open the log file.");
-        return 1.0;
-    }
-
-    // Redirect all cout to log file
-    // https://www.quora.com/How-do-I-output-all-my-cout-s-to-a-text-file-in-C
-    auto cout_buff = std::cout.rdbuf();
-    std::cout.rdbuf(logOfs.rdbuf());
 
     GoZ obj;
     obj.read(gozPath.string());
