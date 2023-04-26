@@ -4,7 +4,7 @@ https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8
 
 ## Notes:
 
-**This early version may still have bugs. It is recommended to save the file under a different name and use a new layer. It is not guaranteed to work in all environments.**
+**Make sure to save the file under a different name and use a new layer. It is not guaranteed to work in all environments.**
 
 ## Supported textures
 
@@ -38,14 +38,14 @@ Textures need to be...
 ## Install
 
 ### Windows10 & ZBrush2022
-1. Download the latest [UDIMTextureImporter for Win]() file and extract it to ZPlug64 folder.
+1. Download the latest [UDIMTextureImporter for Win](https://github.com/minoue/displacementImporter/releases/download/2.0/UDIMTextureImporterData_win10_2022.zip) file and extract it to ZPlugs64 folder.
 2. Move tiff.dll to the same directory as ZBrush.exe.
-3. Move UDIMTextureImporter.zsc to ZPlug64 folder
+3. Move UDIMTextureImporter.zsc to ZPlugs64 folder
 
 ### MacOS & ZBrush2022
 1. Install libtiff : `brew install libtiff`
-1. Download the latest [UDIMTextureImporter for MacOS]() file and extract it to ZPlug64 folder.
-3. Move UDIMTextureImporter.zsc to ZPlug64 folder
+1. Download the latest [UDIMTextureImporter for MacOS]() file and extract it to ZPlugs64 folder.
+3. Move UDIMTextureImporter.zsc to ZPlugs64 folder
 
 ## Build Instruction
 ### Requirements
@@ -80,3 +80,4 @@ This software uses the following libraries.
 [Eigen](https://eigen.tuxfamily.org/) / MPL2 
 
 ## License
+[GPLv3](./LICENSE)
