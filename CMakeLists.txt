@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 project(UDIMTextureImporter)
 
+set(DLL_VERSION 2.0)
+
 set(SOURCE_FILES
     ../UDIMTextureImporterData/src/udimTextureImporter.cpp
     ../UDIMTextureImporterData/src/goz.cpp
@@ -26,7 +28,7 @@ else()
     set(CMAKE_CXX_FLAGS_DEBUG "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
     set(PLUGIN_SUFFIX ".lib")
-    set(CMAKE_SHARED_LINKER_FLAGS "-dynamiclib, -current_version 1.0")
+    set(CMAKE_SHARED_LINKER_FLAGS "-dynamiclib, -current_version ${DLL_VERSION}")
     set(CMAKE_MACOSX_RPATH 1)
 endif()
 
