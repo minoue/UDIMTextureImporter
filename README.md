@@ -1,7 +1,4 @@
-# Displacement Importer for ZBrush
-
-UDIM Normal/Vector displacement importer
-
+# UDIM Texture Importer for ZBrush
 
 https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8190-48a2260320f9.mp4
 
@@ -9,57 +6,77 @@ https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8
 
 **This early version may still have bugs. It is recommended to save the file under a different name and use a new layer. It is not guaranteed to work in all environments.**
 
-**Because of a technical limitation, this plugin needs to export a temporary obj file and it may take some time if your mesh has more than a few million polygons. You might want to take a cup of tea or coffee.**
+## Supported textures
 
+### Vector Displacement
 
-## Requirements for maps
-Displacement maps need to be...
+Textures need to be... 
 
-* Tangent Vector or standard displacement
+* Tangent Vector
 * 32bit tiff/exr or 16bit float-point exr
 * Mid point 0.0
-* named as UDIM, such as body.1001.tif
+* UDIM naming convention (eg. fileName.1001.tif)
+* Flip and switch: 25 (ZBrush)
+* Tangent Flip and switch: 25 (ZBrush)
+* Absolute tangent (Mudbox)
 
-and exported in the follwing settings for the tangent vector.
+### Normal Displacement
+* 32bit tiff/exr or 16bit float-point exr
+* Mid point 0.0
+* UDIM naming convention (eg. fileName.1001.tif)
 
-#### ZBrush
-* Flip and switch: 25
-* Tangent Flip and switch: 25
+### Color
+* 8 or 16 bit tiff
+* UDIM naming convention (eg. fileName.1001.tif)
 
-#### Mudbox
-* Absolute tangent
+### B/W mask
+* 8 or 16 bit tiff
+* UDIM naming convention (eg. fileName.1001.tif)
 
 **There are no settings on the UI to change the above settings at the moment. Therefore, any maps that do not follow these settings will not work.**
 
 ## Install
 
-#### Windows10 & ZBrush2022
-Download [zip](https://github.com/minoue/displacementImporter/releases/download/v0.1/DisplacementImporter_2022_win10.zip) file and extract it.
+### Windows10 & ZBrush2022
+1. Download the latest [UDIMTextureImporter for Win]() file and extract it to ZPlug64 folder.
+2. Move tiff.dll to the same directory as ZBrush.exe.
+3. Move UDIMTextureImporter.zsc to ZPlug64 folder
 
-Move 'displacementImporterData' folder and DisplacementImporter_2022.zsc to the ZPlug64 directory.
+### MacOS & ZBrush2022
+1. Install libtiff : `brew install libtiff`
+1. Download the latest [UDIMTextureImporter for MacOS]() file and extract it to ZPlug64 folder.
+3. Move UDIMTextureImporter.zsc to ZPlug64 folder
 
+## Build Instruction
+### Requirements
+* C++17
+* [libtiff](http://www.libtiff.org)
 
-#### MacOS & ZBrush2022
-Coming soon.
+For MacOS, you can use homebrew: `brew install libtiff`
 
+For Windows, you may use a package manager such as Chocolatey or build from source code.
 
-## Build
-[How to build](./BUILD.md)
+### How to build
 
+```sh
+git clone https://github.com/minoue/displacementImporter
+cd displacementImporter
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ../
+cmake --build . --config Release --target install
+```
 
 ## Credits
 This software uses the following libraries.
-
-[CLI11: Command line parser for C++11](https://github.com/CLIUtils/CLI11) / The 3-Clause BSD License / Henry Schreiner
 
 [tinyexr](https://github.com/syoyo/tinyexr) / The 3-Clause BSD License / Shoyo Fujita
 
 [libtiff](http://www.libtiff.org) / LibTIFF license / Copyright © 1988-1997 Sam Leffler / Copyright © 1991-1997 Silicon Graphics, Inc.  
 
-[objModifier](https://github.com/minoue/objModifier) / MIT License / Michitaka Inoue
+[FromZ](https://github.com/n-taka/FromZ) / GPLv3  / © Kazutaka Nakashima   
+
+[Eigen](https://eigen.tuxfamily.org/) / MPL2 
 
 ## License
-[MIT License](./LICENSE)
-
-
-
