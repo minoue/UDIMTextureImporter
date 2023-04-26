@@ -303,7 +303,7 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
     this->vertices = outVertices;
 }
 
-void GoZ::importVertexColor(std::vector<std::string>& texture_paths)
+void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamma)
 {
 
     std::vector<Image> textures = initTextures(texture_paths);
@@ -358,7 +358,12 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths)
                 }
             }
             float alpha = 1.0;
-            std::vector<float> col = { rgb.x(), rgb.y(), rgb.z(), alpha };
+            float gammaCorrection = static_cast<float>(1.0 / gamma);
+            std::vector<float> col = {pow(rgb.x(), gammaCorrection),
+                                      pow(rgb.y(), gammaCorrection),
+                                      pow(rgb.z(), gammaCorrection),
+                                      alpha };
+
             outColor[static_cast<size_t>(vertexID)] = col;
         }
     }

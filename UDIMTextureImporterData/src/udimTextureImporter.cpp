@@ -11,7 +11,7 @@
 #include "udimTextureImporter.hpp"
 
 float EXPORT ImportUDIM(char* GoZFilePath,
-    double dspMode,
+    double gamma,
     char* pOptBuffer1,
     int optBuffer1Size,
     char* pOptBuffer2,
@@ -52,7 +52,6 @@ float EXPORT ImportUDIM(char* GoZFilePath,
 
     std::vector<std::string> texture_paths;
     std::string pathArray(pOptBuffer1);
-    int mode = static_cast<int>(dspMode);
     int pathArrayLength = static_cast<int>(pathArray.length());
 
     // Split/Convert texture path strings
@@ -67,6 +66,11 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         }
     }
 
+    // Extract the mode value, which is the first element of the texture_paths vector
+    std::string modeStr = texture_paths[0];
+    int mode = std::stoi(modeStr);
+    texture_paths.erase(texture_paths.begin());
+
     GoZ obj;
     obj.read(gozPath.string());
 
@@ -78,7 +82,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         obj.importNormalDisplacement(texture_paths);
     } else if (mode == 3) {
         // Vertex color
-        obj.importVertexColor(texture_paths);
+        obj.importVertexColor(texture_paths, gamma);
     } else if (mode == 4) {
         obj.importMask(texture_paths);
     } else {

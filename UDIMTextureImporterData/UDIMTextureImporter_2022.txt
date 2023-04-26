@@ -7,6 +7,7 @@
 
 [VarDef, GoZPathToDLL, ""]
 [VarDef, GoZPathFromDLL, ""]
+[VarDef, Gamma, 1.0]
 
 // Import model
 // 0 : Disabled
@@ -150,6 +151,18 @@
     ]
 [IEnable, "ZPlugin:UDIM Texture Importer:Mask"]
 
+[ISlider,
+    "ZPlugin:UDIM Texture Importer:Gamma",
+    1,
+    0.1,
+    0,
+    2.2,
+    ,
+    // command
+    [VarSet, Gamma, [IGet, "ZPlugin:UDIM Texture Importer:Gamma"]]
+]
+[IEnable, "ZPlugin:UDIM Texture Importer:Gamma"]
+
 [IButton,
     "ZPlugin:UDIM Texture Importer:Import UDIM Textures", // Button name
     "Import UDIM Textures", // Popup info text
@@ -197,6 +210,10 @@
             [VarSet, index, 1]
             [VarSet, offset, 0]
 
+            [MemWriteString, memOutputPaths, [StrMerge, mode, "#"], offset] 
+            [VarInc, offset]
+            [VarInc, offset]
+
             [Loop, fileCount,
                 [VarSet, err, [FileExecute, [Var, dllPath], GetFilePath, , index, memTexturePaths]]
                 [VarInc, index]
@@ -215,7 +232,7 @@
                             [Var, udimPluginPath],
                             "ImportUDIM",
                             GoZPathToDLL,
-                            mode,
+                            Gamma,
                             memOutputPaths,
                             memDllLog]]
             [If, err,

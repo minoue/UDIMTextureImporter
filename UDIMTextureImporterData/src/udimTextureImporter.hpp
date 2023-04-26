@@ -15,7 +15,7 @@ extern "C" {
 #endif
 
 float EXPORT ImportUDIM(char* textFromZBrush,
-    double dspMode,
+    double gamma,
     char* pOptBuffer1,
     int optBuffer1Size,
     char* pOptBuffer2,
