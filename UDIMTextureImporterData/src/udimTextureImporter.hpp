@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-float EXPORT ImportUDIM(char* textFromZBrush,
+int EXPORT ImportUDIM(char* textFromZBrush,
     double gamma,
     char* pOptBuffer1,
     int optBuffer1Size,

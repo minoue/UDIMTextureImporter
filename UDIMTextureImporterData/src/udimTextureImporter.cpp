@@ -10,7 +10,7 @@
 #include "goz.hpp"
 #include "udimTextureImporter.hpp"
 
-float EXPORT ImportUDIM(char* GoZFilePath,
+int EXPORT ImportUDIM(char* GoZFilePath,
     double gamma,
     char* pOptBuffer1,
     int optBuffer1Size,
@@ -34,7 +34,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         message = "Cannot find GoZ file : ";
         message.append(gozPath.string());
         strcpy(pOptBuffer2, message.c_str());
-        return 1.0;
+        return 1;
     }
 
     std::filesystem::path logPath = gozPath.string();
@@ -43,7 +43,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     std::ofstream logOfs(logPath, std::ios::out);
     if (!logOfs) {
         strcpy(pOptBuffer2, "Failed to open the log file.");
-        return 1.0;
+        return 1;
     }
     // Redirect all cout to log file
     // https://www.quora.com/How-do-I-output-all-my-cout-s-to-a-text-file-in-C
@@ -88,7 +88,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     } else {
         // Not supported
         strcpy(pOptBuffer2, "Invalid mode number");
-        return 1.0;
+        return 1;
     }
 
     gozPath.replace_filename("dspImporter_from_DLL.GoZ");
@@ -101,7 +101,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
 
     std::cout.rdbuf(cout_buff);
 
-    return 0.0f;
+    return 0;
 }
 
 #ifdef _WIN32
