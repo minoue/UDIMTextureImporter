@@ -20,7 +20,7 @@ int EXPORT ImportUDIM(char* GoZFilePath,
 {
     std::string GoZPathStr(GoZFilePath);
 
-    // If a path from zscript starts with '!:u', delete them.
+    // If a path from zscript starts with '!:', delete them.
     if (GoZPathStr.c_str()[0] == '!') {
         GoZPathStr.erase(0, 2);
     }
@@ -37,6 +37,7 @@ int EXPORT ImportUDIM(char* GoZFilePath,
         return 1;
     }
 
+    // Create a path for the log file
     std::filesystem::path logPath = gozPath.string();
     logPath.replace_extension("log");
 
@@ -45,18 +46,22 @@ int EXPORT ImportUDIM(char* GoZFilePath,
         strcpy(pOptBuffer2, "Failed to open the log file.");
         return 1;
     }
+
     // Redirect all cout to log file
     // https://www.quora.com/How-do-I-output-all-my-cout-s-to-a-text-file-in-C
     auto cout_buff = std::cout.rdbuf();
     std::cout.rdbuf(logOfs.rdbuf());
 
+    // Split/Convert the long texture path string to vector
+    // pOptBuffer1 comes in this format:
+    // "1#C:/path/image.1001.tif#C:/path/image.1002.tif#C:/path.image.1003.tif ....
+    // The first element is the mode(1-4), and the second to the last is the texture paths.
     std::vector<std::string> texture_paths;
-    std::string pathArray(pOptBuffer1);
-    int pathArrayLength = static_cast<int>(pathArray.length());
+    std::string pathString(pOptBuffer1);
+    int pathStringLength = static_cast<int>(pathString.length());
 
-    // Split/Convert texture path strings
     std::string path;
-    for (int i = 0; i < pathArrayLength; i++) {
+    for (int i = 0; i < pathStringLength; i++) {
         const char c = pOptBuffer1[i];
         if (c == '#') {
             texture_paths.push_back(path);
@@ -75,13 +80,10 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     obj.read(gozPath.string());
 
     if (mode == 1) {
-        // Vector Displacement
         obj.importVectorDisplacement(texture_paths);
     } else if (mode == 2) {
-        // Normal Displacement
         obj.importNormalDisplacement(texture_paths);
     } else if (mode == 3) {
-        // Vertex color
         obj.importVertexColor(texture_paths, gamma);
     } else if (mode == 4) {
         obj.importMask(texture_paths);
@@ -91,14 +93,13 @@ int EXPORT ImportUDIM(char* GoZFilePath,
         return 1;
     }
 
+    // Export modified GoZ file
     gozPath.replace_filename("dspImporter_from_DLL.GoZ");
     std::cout << "GoZ output path: " << gozPath.string() << std::endl;
-
     obj.write(gozPath.string());
 
     logOfs << "End dll" << std::endl;
     logOfs.close();
-
     std::cout.rdbuf(cout_buff);
 
     return 0;
