@@ -329,10 +329,6 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
 
             Vector3f P0(P.data());
 
-            Vector3f N;
-            N = this->normals[static_cast<size_t>(vertexID)];
-            N.normalize();
-
             float u = uv.x();
             float v = uv.y();
 
