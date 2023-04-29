@@ -339,15 +339,18 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
             size_t udim = ImageUtils::get_udim(u, v);
 
             Vector3f rgb;
+            float alpha = 1.0;
 
             if (udim > textures.size()) {
-                // If UVs are outside of the given UDIM range, use same point
+                // If UVs are outside of the given UDIM range, no color
                 rgb << 0, 0, 0;
+                alpha = 0.0;
             } else {
                 Image& img = textures[udim - 1];
                 if (img.isEmpty) {
-                    // If UVs are within the given UDIM range but has no textures, use same point
+                    // If UVs are within the given UDIM range but has no textures, no color
                     rgb << 0, 0, 0;
+                    alpha = 0.0;
                 } else {
                     int width = img.width;
                     int height = img.height;
@@ -357,7 +360,6 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
                     rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
                 }
             }
-            float alpha = 1.0;
             float gammaCorrection = static_cast<float>(1.0 / gamma);
             std::vector<float> col = {pow(rgb.x(), gammaCorrection),
                                       pow(rgb.y(), gammaCorrection),
