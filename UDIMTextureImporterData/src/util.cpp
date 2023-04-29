@@ -27,21 +27,6 @@ size_t Utils::split(const std::string& txt, std::vector<std::string>& strs, char
     return strs.size();
 }
 
-// https://marycore.jp/prog/cpp/vector-join/
-std::string Utils::join(const std::vector<std::string>& v, const char* delim = 0)
-{
-    std::string s;
-    if (!v.empty()) {
-        s += v[0];
-        for (decltype(v.size()) i = 1, c = v.size(); i < c; ++i) {
-            if (delim)
-                s += delim;
-            s += v[i];
-        }
-    }
-    return s;
-}
-
 std::string Utils::pathGetUdim(const std::string path)
 {
     std::vector<std::string> pathSplit;
@@ -53,22 +38,4 @@ std::string Utils::pathGetUdim(const std::string path)
     std::string udim = word.substr(strLen - 4);
 
     return udim;
-}
-
-// https://www.oreilly.com/library/view/c-cookbook/0596007612/ch03s06.html
-float Utils::sciToFloat(const std::string& str)
-{
-
-    std::stringstream ss(str);
-    float d = 0;
-    ss >> d;
-
-    if (ss.fail()) {
-        std::string s = "Unable to format ";
-        s += str;
-        s += " as a number!";
-        throw(s);
-    }
-
-    return (d);
 }

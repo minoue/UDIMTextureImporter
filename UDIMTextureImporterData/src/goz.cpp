@@ -424,10 +424,7 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
                     rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
                 }
             }
-            // float alpha = 1.0;
             float maskValue = rgb.x();
-            // std::vector<float> col = { rgb.x(), rgb.y(), rgb.z(), alpha };
-            // outMask[static_cast<size_t>(vertexID)] = col;
             outMask[static_cast<size_t>(vertexID)] = maskValue;
         }
     }
