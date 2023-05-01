@@ -4,13 +4,17 @@ https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8
 
 ## Notes:
 
-**Make sure to save the file under a different name and use a new layer. It is not guaranteed to work in all environments.**
+**This plugin may still have bugs. Be sure to make a new save, create a new layer, and run it on that.**
 
-## Supported textures
+## Getting Started
 
-### Vector Displacement
+### Prerequisties
 
-Textures need to be... 
+In addition to being a UDIM naming convention (eg. filename.1001.tif), textures must meet the following requrements.
+
+For MacOS, you must install libtiff first. `brew install libtiff` 
+
+#### Vector Displacement
 
 * Tangent Vector
 * 32bit tiff/exr or 16bit float-point exr
@@ -20,35 +24,45 @@ Textures need to be...
 * Tangent Flip and switch: 25 (ZBrush)
 * Absolute tangent (Mudbox)
 
-### Normal Displacement
+#### Normal Displacement
 * 32bit tiff/exr or 16bit float-point exr
 * Mid point 0.0
-* UDIM naming convention (eg. fileName.1001.tif)
 
-### Color
-* 8 or 16 bit tiff
-* UDIM naming convention (eg. fileName.1001.tif)
+#### Color
+* 8bit tiff/jpg/png or 16bit tiff
 
-### B/W mask
-* 8 or 16 bit tiff
-* UDIM naming convention (eg. fileName.1001.tif)
+#### Mask
+* 8bit or 16bit black/white tiff
 
-**There are no settings on the UI to change the above settings at the moment. Therefore, any maps that do not follow these settings will not work.**
+### Installation
 
-## Install
-
-### Windows10 & ZBrush2022
+#### Windows10 & ZBrush2022
 1. Download the latest [UDIMTextureImporter for Win](https://github.com/minoue/displacementImporter/releases/download/2.0/UDIMTextureImporterData_win10_2022.zip) file and extract it to ZPlugs64 folder.
 2. Move tiff.dll to the same directory as ZBrush.exe.
 3. Move UDIMTextureImporter.zsc to ZPlugs64 folder
 
-### MacOS & ZBrush2022
-1. Install libtiff : `brew install libtiff`
-1. Download the latest [UDIMTextureImporter for MacOS]() file and extract it to ZPlugs64 folder.
-3. Move UDIMTextureImporter.zsc to ZPlugs64 folder
+#### MacOS & ZBrush2022
+coming soon
+
+## Usage
+Go to `ZPlugin` -> `UDIM Texture Importer`, and select the texture type you want to import.
+
+<img src="./img/menu.png" alt= “” width="200">
+
+*If your textures are sRGB and trying to import them as polypaint, set the gamma slider to 2.2*
+
+## Roadmap
+- [x] Vector Displacement
+- [x] Normal Displacement
+- [x] Color to polypaint
+- [x] B/W mask
+- [ ] Bump
+- [ ] Additional image formats
 
 ## Build Instruction
+
 ### Requirements
+
 * C++17
 * [libtiff](http://www.libtiff.org)
 
@@ -68,6 +82,14 @@ cmake -DCMAKE_BUILD_TYPE=Release ../
 cmake --build . --config Release --target install
 ```
 
+## License
+[GPLv3](./LICENSE)
+
+## Contact
+
+`michitaka.inoue at icloud.com`
+
+
 ## Credits
 This software uses the following libraries.
 
@@ -79,5 +101,5 @@ This software uses the following libraries.
 
 [Eigen](https://eigen.tuxfamily.org/) / MPL2 
 
-## License
-[GPLv3](./LICENSE)
+[stb_image](https://github.com/nothings/stb) / [MIT License](https://github.com/nothings/stb/blob/master/LICENSE) / © 2017 Sean Barrett
+
