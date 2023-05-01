@@ -136,6 +136,7 @@ std::vector<Image> GoZ::initTextures(std::vector<std::string>& texture_paths)
         int udim = stoi(texture_udim) - 1000;
         textures[static_cast<size_t>(udim - 1)] = img;
     }
+    std::cout << "Finished loading textures" << std::endl;
     return textures;
 }
 
@@ -145,8 +146,7 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
     std::vector<Image> textures = initTextures(texture_paths);
 
     // Vector Displacement
-    std::vector<std::vector<float>> outVertices;
-    outVertices.resize(this->vertices.size());
+    std::vector<std::vector<float>> outVertices = this->vertices;
 
     size_t numFaces = this->faces.size();
     for (size_t i = 0; i < numFaces; i++) {
@@ -211,30 +211,27 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
 
             size_t udim = ImageUtils::get_udim(u, v);
 
-            Vector3f displace;
-
             if (udim > textures.size()) {
                 // If UVs are outside of the given UDIM range, use same point
-                displace << 0, 0, 0;
-            } else {
-                Image& img = textures[udim - 1];
-                if (img.isEmpty) {
-                    // If UVs are within the given UDIM range but has no textures, use same point
-                    displace << 0, 0, 0;
-                } else {
-                    int width = img.width;
-                    int height = img.height;
-                    int channels = img.nchannels;
-
-                    Vector2f local_uv = ImageUtils::localize_uv(u, v);
-                    Vector3f rgb;
-                    rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
-                    displace = rgb.transpose() * mat;
-                }
+                continue;
             }
-            Vector3f new_pp = P0 + displace;
-            std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
-            outVertices[static_cast<size_t>(currentVertexID)] = xyz;
+
+            Image& img = textures[udim - 1];
+
+            if (!img.isEmpty) {
+                Vector2f local_uv = ImageUtils::localize_uv(u, v);
+                Vector3f rgb = ImageUtils::get_pixel_values(
+                    local_uv.x(),
+                    local_uv.y(),
+                    img.pixels,
+                    img.width,
+                    img.height,
+                    img.nchannels);
+                Vector3f displace = rgb.transpose() * mat;
+                Vector3f new_pp = P0 + displace;
+                std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
+                outVertices[static_cast<size_t>(currentVertexID)] = xyz;
+            }
         }
     }
     this->vertices = outVertices;
@@ -245,9 +242,7 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
 
     std::vector<Image> textures = initTextures(texture_paths);
 
-    // Vector Displacement
-    std::vector<std::vector<float>> outVertices;
-    outVertices.resize(this->vertices.size());
+    std::vector<std::vector<float>> outVertices = this->vertices;
 
     size_t numFaces = this->faces.size();
     for (size_t i = 0; i < numFaces; i++) {
@@ -275,29 +270,26 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
 
             size_t udim = ImageUtils::get_udim(u, v);
 
-            Vector3f rgb;
-
             if (udim > textures.size()) {
                 // If UVs are outside of the given UDIM range, use same point
-                rgb << 0, 0, 0;
-            } else {
-                Image& img = textures[udim - 1];
-                if (img.isEmpty) {
-                    // If UVs are within the given UDIM range but has no textures, use same point
-                    rgb << 0, 0, 0;
-                } else {
-                    int width = img.width;
-                    int height = img.height;
-                    int channels = img.nchannels;
-
-                    Vector2f local_uv = ImageUtils::localize_uv(u, v);
-                    Vector3f rgb;
-                    rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
-                }
+                continue;
             }
-            Vector3f new_pp = P0 + (N * rgb.x());
-            std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
-            outVertices[static_cast<size_t>(vertexID)] = xyz;
+
+            Image& img = textures[udim - 1];
+
+            if (!img.isEmpty) {
+                Vector2f local_uv = ImageUtils::localize_uv(u, v);
+                Vector3f rgb = ImageUtils::get_pixel_values(
+                    local_uv.x(),
+                    local_uv.y(),
+                    img.pixels,
+                    img.width,
+                    img.height,
+                    img.nchannels);
+                Vector3f new_pp = P0 + (N * rgb.x());
+                std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
+                outVertices[static_cast<size_t>(vertexID)] = xyz;
+            }
         }
     }
     this->vertices = outVertices;
@@ -308,10 +300,6 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
 
     std::vector<Image> textures = initTextures(texture_paths);
 
-    // Vertex Color
-    std::vector<std::vector<float>> outColor;
-    outColor.resize(this->vertices.size());
-
     size_t numFaces = this->faces.size();
     for (size_t i = 0; i < numFaces; i++) {
         std::vector<int>& faceVertices = this->faces[i];
@@ -334,38 +322,34 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
 
             size_t udim = ImageUtils::get_udim(u, v);
 
-            Vector3f rgb;
-            float alpha = 1.0;
-
             if (udim > textures.size()) {
-                // If UVs are outside of the given UDIM range, no color
-                rgb << 0, 0, 0;
-                alpha = 0.0;
-            } else {
-                Image& img = textures[udim - 1];
-                if (img.isEmpty) {
-                    // If UVs are within the given UDIM range but has no textures, no color
-                    rgb << 0, 0, 0;
-                    alpha = 0.0;
-                } else {
-                    int width = img.width;
-                    int height = img.height;
-                    int channels = img.nchannels;
-
-                    Vector2f local_uv = ImageUtils::localize_uv(u, v);
-                    rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
-                }
+                // If UVs are outside of the given UDIM range, no color changes
+                continue;
             }
-            float gammaCorrection = static_cast<float>(1.0 / gamma);
-            std::vector<float> col = {pow(rgb.x(), gammaCorrection),
-                                      pow(rgb.y(), gammaCorrection),
-                                      pow(rgb.z(), gammaCorrection),
-                                      alpha };
 
-            outColor[static_cast<size_t>(vertexID)] = col;
+            Image& img = textures[udim - 1];
+
+            if (!img.isEmpty) {
+                Vector3f rgb;
+                Vector2f local_uv = ImageUtils::localize_uv(u, v);
+                rgb = ImageUtils::get_pixel_values(
+                    local_uv.x(),
+                    local_uv.y(),
+                    img.pixels,
+                    img.width,
+                    img.height,
+                    img.nchannels);
+                float gammaCorrection = static_cast<float>(1.0 / gamma);
+
+                std::vector<float> col = { pow(rgb.x(), gammaCorrection),
+                    pow(rgb.y(), gammaCorrection),
+                    pow(rgb.z(), gammaCorrection),
+                    1.0 };
+
+                this->vertexColor[static_cast<size_t>(vertexID)] = col;
+            }
         }
     }
-    this->vertexColor = outColor;
 }
 
 void GoZ::importMask(std::vector<std::string>& texture_paths)
@@ -373,9 +357,8 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
 
     std::vector<Image> textures = initTextures(texture_paths);
 
-    // Vertex Color
-    std::vector<float> outMask;
-    outMask.resize(this->mask.size());
+    // Init mask value array with 0.0
+    std::vector<float> outMask(this->mask.size(), 0.0);
 
     size_t numFaces = this->faces.size();
     for (size_t i = 0; i < numFaces; i++) {
@@ -403,27 +386,25 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
 
             size_t udim = ImageUtils::get_udim(u, v);
 
-            Vector3f rgb;
-
             if (udim > textures.size()) {
-                // If UVs are outside of the given UDIM range, use same point
-                rgb << 0, 0, 0;
-            } else {
-                Image& img = textures[udim - 1];
-                if (img.isEmpty) {
-                    // If UVs are within the given UDIM range but has no textures, use same point
-                    rgb << 0, 0, 0;
-                } else {
-                    int width = img.width;
-                    int height = img.height;
-                    int channels = img.nchannels;
-
-                    Vector2f local_uv = ImageUtils::localize_uv(u, v);
-                    rgb = ImageUtils::get_pixel_values(local_uv.x(), local_uv.y(), img.pixels, width, height, channels);
-                }
+                // If UVs are outside of the given UDIM range, use 0.0
+                continue;
             }
-            float maskValue = rgb.x();
-            outMask[static_cast<size_t>(vertexID)] = maskValue;
+
+            Image& img = textures[udim - 1];
+
+            if (!img.isEmpty) {
+                Vector2f local_uv = ImageUtils::localize_uv(u, v);
+                Vector3f rgb = ImageUtils::get_pixel_values(
+                    local_uv.x(),
+                    local_uv.y(),
+                    img.pixels,
+                    img.width,
+                    img.height,
+                    img.nchannels);
+                float maskValue = rgb.x();
+                outMask[static_cast<size_t>(vertexID)] = maskValue;
+            }
         }
     }
     this->mask = outMask;
