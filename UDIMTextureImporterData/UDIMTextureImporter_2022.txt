@@ -174,7 +174,7 @@
         ]
 
         [VarDef, dialogTitle, "Please select image files"]
-        [VarSet, fileExt, "tif,tiff,exr"]
+        [VarSet, fileExt, "tif,tiff,exr,png,jpg,jpeg"]
         [MemCreate, ZFileUTils_FileExt, 256, 0]
         [MemWriteString, ZFileUTils_FileExt, fileExt, 0]
         [VarSet, fileCount, [FileExecute, [Var,dllPath], "GetFilesDialog", #dialogTitle, , ZFileUTils_FileExt]]

@@ -23,6 +23,7 @@ public:
 private:
     void loadExr(const std::string& path);
     void loadTif(const std::string& path);
+    void loadImg(const std::string& path);
 };
 
 namespace ImageUtils {

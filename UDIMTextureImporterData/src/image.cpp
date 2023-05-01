@@ -1,8 +1,10 @@
 #define TINYEXR_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
 
 #include <cmath>
 #include <filesystem>
 
+#include "stb_image.h"
 #include "image.hpp"
 #include "tinyexr.h"
 #include "util.hpp"
@@ -21,16 +23,46 @@ void Image::read(const std::string path)
 {
 
     std::filesystem::path p = path;
-    std::string ext = p.extension().string();
+    auto ext = p.extension();
 
     if (ext == ".exr") {
         loadExr(path);
     } else if (ext == ".tif" || ext == ".tiff") {
         loadTif(path);
+    } else if (ext == ".png" || ext == ".jpg" || ext == ".jpeg") {
+        loadImg(path);
     } else {
         std::cout << "Not supported images" << std::endl;
         exit(EXIT_FAILURE);
     }
+}
+
+void Image::loadImg(const std::string& path)
+{
+    int& width = this->width;
+    int& height = this->height;
+    int& nchannels = this->nchannels;
+
+    unsigned char *data = stbi_load(path.c_str(), &width, &height, &nchannels, 3);
+
+    std::cout << "Loading :" << path << std::endl;
+
+    size_t img_size = static_cast<size_t>(width * height * nchannels);
+
+    this->pixels.resize(img_size);
+
+    if (data != NULL) {
+        for (size_t i=0; i<img_size; i++) {
+            int value = data[i];
+            float float_value = float(value) / 255.0f;
+            this->pixels[i] = float_value;
+        }
+    } else {
+        stbi_image_free(data);
+        std::cout << "err image loading img" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    stbi_image_free(data);
 }
 
 void Image::loadExr(const std::string& path)
