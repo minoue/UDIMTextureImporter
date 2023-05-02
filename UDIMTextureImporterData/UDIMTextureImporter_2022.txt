@@ -261,6 +261,13 @@
         [ISet, Tool:Geometry:Y Position, [Var, posY]]
         [ISet, Tool:Geometry:Z Position, [Var, posZ]]
 
+        // Update view for mask
+        [If, mode == 4,
+            [IPress,Tool:Masking:Inverse]
+            [IPress,Tool:Masking:Inverse]
+            ,
+        ]
+
         // Cleanup
         [If, [FileExists, GoZPathFromDLL],
             [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #GoZPathFromDLL]] // Delete this file...
