@@ -11,7 +11,7 @@
 
 // Import model
 // 0 : Disabled
-// 1 : Tangent Vector
+// 1 : Vector Displacement
 // 2 : Normal
 // 3 : Color
 // 4 : Mask
@@ -76,11 +76,11 @@
 [ISubPalette,"ZPlugin:UDIM Texture Importer"]
        
 [ISwitch,
-    "ZPlugin:UDIM Texture Importer:Tangent Vector",
+    "ZPlugin:UDIM Texture Importer:Vector Displacement",
     1,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 1]
@@ -92,14 +92,14 @@
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
+[IEnable, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
 
 [ISwitch,
-    "ZPlugin:UDIM Texture Importer:Normal Vector",
+    "ZPlugin:UDIM Texture Importer:Normal Displacement",
     0,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 2]
@@ -111,15 +111,15 @@
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+[IEnable, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
 
 [ISwitch,
     "ZPlugin:UDIM Texture Importer:Vertex Color",
     0,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 3]
     ,
@@ -137,8 +137,8 @@
     0,
     "Switch 1",
     // on command
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Tangent Vector"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Vector"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [VarSet, mode, 4]
     ,
