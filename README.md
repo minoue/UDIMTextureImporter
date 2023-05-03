@@ -20,9 +20,9 @@ For MacOS, you must install libtiff first. `brew install libtiff`
 * 32bit tiff/exr or 16bit float-point exr
 * Mid point 0.0
 * UDIM naming convention (eg. fileName.1001.tif)
-* Flip and switch: 25 (ZBrush)
-* Tangent Flip and switch: 25 (ZBrush)
-* Absolute tangent (Mudbox)
+* **Flip and switch: 25 (ZBrush)**
+* **Tangent Flip and switch: 25 (ZBrush)**
+* **Absolute tangent (Mudbox)**
 
 #### Normal Displacement
 * 32bit tiff/exr or 16bit float-point exr
@@ -37,9 +37,20 @@ For MacOS, you must install libtiff first. `brew install libtiff`
 ### Installation
 
 #### Windows10 & ZBrush2022
-1. Download the latest [UDIMTextureImporter for Win](https://github.com/minoue/displacementImporter/releases/download/2.0/UDIMTextureImporterData_win10_2022.zip) file and extract it to ZPlugs64 folder.
-2. Move tiff.dll to the same directory as ZBrush.exe.
-3. Move UDIMTextureImporter.zsc to ZPlugs64 folder
+1. Go to [release page](https://github.com/minoue/UDIMTextureImporter/releases), download the latest and extract it.
+2. Move tiff.dll to the same directory as ZBrush.exe. (eg. `C:\Program Files\Pixologic\ZBrush 2022\tiff.dll`) 
+3. Move `UDIMTextureImporter_2022.zsc` to `ZPlugs64` folder.
+4. Move `UDIMTextureImporterData` to `ZPlugs64` folder.
+
+```
+ZStartup/
+├─ ZPlugs64/
+│  ├─ UDIMTextureImporterData/
+│  │  ├─ ZFileUtils/
+│  │  │  ├─ ZFileUtils.dll
+│  │  ├─ UDIMTextureImporter.dll
+│  ├─ UDIMTextureImporter_2022.zsc
+```
 
 #### MacOS & ZBrush2022
 coming soon
@@ -50,6 +61,9 @@ Go to `ZPlugin` -> `UDIM Texture Importer`, and select the texture type you want
 <img src="./img/menu.png" alt= “” width="200">
 
 *If your textures are sRGB and trying to import them as polypaint, set the gamma slider to 2.2*
+
+## Known issues
+Tiff images of zip compression type may not work properly for mask import on Windows. In that case, use LZW compression Tiff or use another format such as PNG.
 
 ## Roadmap
 - [x] Vector Displacement
