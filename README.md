@@ -19,7 +19,6 @@ For MacOS, you must install libtiff first. `brew install libtiff`
 * Tangent Vector
 * 32bit tiff/exr or 16bit float-point exr
 * Mid point 0.0
-* UDIM naming convention (eg. fileName.1001.tif)
 * **Flip and switch: 25 (ZBrush)**
 * **Tangent Flip and switch: 25 (ZBrush)**
 * **Absolute tangent (Mudbox)**
