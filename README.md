@@ -86,8 +86,8 @@ For Windows, you may use a package manager such as Chocolatey or build from sour
 ### How to build
 
 ```sh
-git clone https://github.com/minoue/displacementImporter
-cd displacementImporter
+git clone https://github.com/minoue/UDIMTextureImporter
+cd UDIMTextureImporter
 git submodule update --init --recursive
 mkdir build
 cd build
