@@ -97,21 +97,19 @@ void Image::loadExr(const std::string& path)
 
 void Image::loadTif(const std::string& path)
 {
-    uint32_t width;
-    uint32_t height;
-    uint16_t nc;
-    uint16_t bitDepth;
+    uint32_t width, height;
+    uint16_t nc, bitDepth, row;
 
     std::cout << "Loading tif :" << path << std::endl;
 
     TIFF* tif = TIFFOpen(path.c_str(), "r");
-    if (tif) {
-        tdata_t buf;
 
+    if (tif) {
         TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
         TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
         TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &nc);
         TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitDepth);
+        TIFFGetField(tif, TIFFTAG_ROWSPERSTRIP, &row);
 
         this->nchannels = static_cast<int>(nc);
         this->width = static_cast<int>(width);
@@ -119,36 +117,84 @@ void Image::loadTif(const std::string& path)
 
         this->pixels.reserve(width * height * nc);
 
-        buf = _TIFFmalloc(TIFFScanlineSize(tif));
-        for (uint32_t row = 0; row < height; row++) {
-            TIFFReadScanline(tif, buf, row);
-            for (uint32_t col = 0; col < width; col++) {
-                float r, g, b;
-                if (bitDepth == 32) {
-                    r = static_cast<float*>(buf)[col * nc + 0];
-                    g = static_cast<float*>(buf)[col * nc + 1];
-                    b = static_cast<float*>(buf)[col * nc + 2];
-                } else if (bitDepth == 16) {
-                    uint16_t R = static_cast<uint16_t*>(buf)[col * nc + 0];
-                    uint16_t G = static_cast<uint16_t*>(buf)[col * nc + 1];
-                    uint16_t B = static_cast<uint16_t*>(buf)[col * nc + 2];
-                    r = static_cast<float>(R) / static_cast<float>(65535.0);
-                    g = static_cast<float>(G) / static_cast<float>(65535.0);
-                    b = static_cast<float>(B) / static_cast<float>(65535.0);
+        if (row == 1 && bitDepth == 8) {
+            // Use TIFFReadRGBAImage function instead of scanline
+            // Tif images from certain softwares such as 3dcoat need to be processed
+            // in this way. This is maybe because Rows/Strip is 1, but not sure.
+            //
+            uint32_t npixels = width * height;
+            uint32_t img_size = npixels * nc;
+            this->pixels.resize(img_size);
+            std::fill(this->pixels.begin(), this->pixels.end(), 0.0);
+
+            uint32_t* raster = (uint32_t*)_TIFFmalloc(npixels * sizeof(uint32_t));
+            if (raster == NULL) {
+                std::cout << "err1" << std::endl;
+            } else {
+                if (TIFFReadRGBAImage(tif, width, height, raster, 0)) {
+                    for (uint32_t y=0; y<width; y++) {
+                        for (uint32_t x=0; x<height; x++) {
+
+                            uint32_t elementNum = x + (width * y);
+
+                            uint16_t R = (uint8_t)TIFFGetR(raster[elementNum]);
+                            uint16_t G = (uint8_t)TIFFGetG(raster[elementNum]);
+                            uint16_t B = (uint8_t)TIFFGetB(raster[elementNum]);
+                            uint16_t A = (uint8_t)TIFFGetA(raster[elementNum]);
+
+                            float r = float(R) / 255.0f;
+                            float g = float(G) / 255.0f;
+                            float b = float(B) / 255.0f;
+                            float a = float(A) / 255.0f;
+
+                            // flip pixels vertically
+                            uint32_t targetNum = width * (height - y - 1) + x;
+
+                            this->pixels[targetNum * nc + 0] = r;
+                            this->pixels[targetNum * nc + 1] = g;
+                            this->pixels[targetNum * nc + 2] = b;
+                            this->pixels[targetNum * nc + 3] = a;
+                        }
+                    }
                 } else {
-                    uint16_t R = static_cast<uint8_t*>(buf)[col * nc + 0];
-                    uint16_t G = static_cast<uint8_t*>(buf)[col * nc + 1];
-                    uint16_t B = static_cast<uint8_t*>(buf)[col * nc + 2];
-                    r = static_cast<float>(R) / static_cast<float>(255.0);
-                    g = static_cast<float>(G) / static_cast<float>(255.0);
-                    b = static_cast<float>(B) / static_cast<float>(255.0);
+                    std::cout << "err2" << std::endl;
                 }
-                this->pixels.push_back(r);
-                this->pixels.push_back(g);
-                this->pixels.push_back(b);
+                _TIFFfree(raster);
             }
+        } else {
+            // For most standart tiff images
+            //
+            tdata_t buf = _TIFFmalloc(TIFFScanlineSize(tif));
+            for (uint32_t row = 0; row < height; row++) {
+                TIFFReadScanline(tif, buf, row);
+                for (uint32_t col = 0; col < width; col++) {
+                    float r, g, b;
+                    if (bitDepth == 32) {
+                        r = static_cast<float*>(buf)[col * nc + 0];
+                        g = static_cast<float*>(buf)[col * nc + 1];
+                        b = static_cast<float*>(buf)[col * nc + 2];
+                    } else if (bitDepth == 16) {
+                        uint16_t R = static_cast<uint16_t*>(buf)[col * nc + 0];
+                        uint16_t G = static_cast<uint16_t*>(buf)[col * nc + 1];
+                        uint16_t B = static_cast<uint16_t*>(buf)[col * nc + 2];
+                        r = static_cast<float>(R) / static_cast<float>(65535.0);
+                        g = static_cast<float>(G) / static_cast<float>(65535.0);
+                        b = static_cast<float>(B) / static_cast<float>(65535.0);
+                    } else {
+                        uint16_t R = static_cast<uint8_t*>(buf)[col * nc + 0];
+                        uint16_t G = static_cast<uint8_t*>(buf)[col * nc + 1];
+                        uint16_t B = static_cast<uint8_t*>(buf)[col * nc + 2];
+                        r = static_cast<float>(R) / static_cast<float>(255.0);
+                        g = static_cast<float>(G) / static_cast<float>(255.0);
+                        b = static_cast<float>(B) / static_cast<float>(255.0);
+                    }
+                    this->pixels.push_back(r);
+                    this->pixels.push_back(g);
+                    this->pixels.push_back(b);
+                }
+            }
+            _TIFFfree(buf);
         }
-        _TIFFfree(buf);
         TIFFClose(tif);
     } else {
         std::cout << "err" << std::endl;
