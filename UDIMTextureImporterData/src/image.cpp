@@ -115,18 +115,18 @@ void Image::loadTif(const std::string& path)
         this->width = static_cast<int>(width);
         this->height = static_cast<int>(height);
 
-        this->pixels.reserve(width * height * nc);
+        uint32_t npixels = width * height;
+        uint32_t img_size = npixels * nc;
+        
+        // Initialize iamge pixel array
+        this->pixels.resize(img_size);
+        std::fill(this->pixels.begin(), this->pixels.end(), 0.0f);
 
         if (row == 1 && bitDepth == 8) {
             // Use TIFFReadRGBAImage function instead of scanline
             // Tif images from certain softwares such as 3dcoat need to be processed
             // in this way. This is maybe because Rows/Strip is 1, but not sure.
             //
-            uint32_t npixels = width * height;
-            uint32_t img_size = npixels * nc;
-            this->pixels.resize(img_size);
-            std::fill(this->pixels.begin(), this->pixels.end(), 0.0);
-
             uint32_t* raster = (uint32_t*)_TIFFmalloc(npixels * sizeof(uint32_t));
             if (raster == NULL) {
                 std::cout << "err1" << std::endl;
@@ -165,6 +165,7 @@ void Image::loadTif(const std::string& path)
             // For most standart tiff images
             //
             tdata_t buf = _TIFFmalloc(TIFFScanlineSize(tif));
+
             for (uint32_t row = 0; row < height; row++) {
                 TIFFReadScanline(tif, buf, row);
                 for (uint32_t col = 0; col < width; col++) {
@@ -188,9 +189,10 @@ void Image::loadTif(const std::string& path)
                         g = static_cast<float>(G) / static_cast<float>(255.0);
                         b = static_cast<float>(B) / static_cast<float>(255.0);
                     }
-                    this->pixels.push_back(r);
-                    this->pixels.push_back(g);
-                    this->pixels.push_back(b);
+                    size_t targetNum = (col + (width * row)) * nc;
+                    this->pixels[targetNum + 0] = r;
+                    this->pixels[targetNum + 1] = g;
+                    this->pixels[targetNum + 2] = b;
                 }
             }
             _TIFFfree(buf);
