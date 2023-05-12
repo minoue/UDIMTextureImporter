@@ -37,21 +37,6 @@ int EXPORT ImportUDIM(char* GoZFilePath,
         return 1;
     }
 
-    // Create a path for the log file
-    std::filesystem::path logPath = gozPath.string();
-    logPath.replace_extension("log");
-
-    std::ofstream logOfs(logPath, std::ios::out);
-    if (!logOfs) {
-        strcpy(pOptBuffer2, "Failed to open the log file.");
-        return 1;
-    }
-
-    // Redirect all cout to log file
-    // https://www.quora.com/How-do-I-output-all-my-cout-s-to-a-text-file-in-C
-    auto cout_buff = std::cout.rdbuf();
-    std::cout.rdbuf(logOfs.rdbuf());
-
     // Split/Convert the long texture path string to vector
     // pOptBuffer1 comes in this format:
     // "1#C:/path/image.1001.tif#C:/path/image.1002.tif#C:/path.image.1003.tif ....
@@ -97,10 +82,6 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     gozPath.replace_filename("dspImporter_from_DLL.GoZ");
     std::cout << "GoZ output path: " << gozPath.string() << std::endl;
     obj.write(gozPath.string());
-
-    logOfs << "End dll" << std::endl;
-    logOfs.close();
-    std::cout.rdbuf(cout_buff);
 
     return 0;
 }

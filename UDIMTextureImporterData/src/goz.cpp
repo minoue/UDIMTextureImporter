@@ -3,6 +3,8 @@
 
 #include "goz.hpp"
 #include "util.hpp"
+#include "timer.hpp"
+
 
 GoZ::GoZ() {};
 
@@ -25,6 +27,9 @@ void GoZ::write(std::string outPath)
 
 void GoZ::computeVertexNormals()
 {
+
+    Timer timer;
+    timer.start();
 
     this->normals.resize(this->vertices.size());
     Vector3f zeroVec(0, 0, 0);
@@ -76,6 +81,9 @@ void GoZ::computeVertexNormals()
     for (auto& n : this->normals) {
         n.normalize();
     }
+
+    timer.showDuration("Vertex normal calculated in ");
+
 }
 
 // https://stackoverflow.com/questions/5255806/how-to-calculate-tangent-and-binorma
@@ -117,6 +125,10 @@ void GoZ::computeTangentBasis(const Vector3f& A,
 
 std::vector<Image> GoZ::initTextures(std::vector<std::string>& texture_paths)
 {
+
+    Timer timer;
+    timer.start();
+
     // Find out the last number of the UDIM images
     int max_udim = 0;
     for (auto& path : texture_paths) {
@@ -136,12 +148,18 @@ std::vector<Image> GoZ::initTextures(std::vector<std::string>& texture_paths)
         int udim = stoi(texture_udim) - 1000;
         textures[static_cast<size_t>(udim - 1)] = img;
     }
-    std::cout << "Finished loading textures" << std::endl;
+
+    timer.showDuration("Finished loading textures in ");
+
     return textures;
 }
 
 void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
 {
+
+
+    Timer timer;
+    timer.start();
 
     std::vector<Image> textures = initTextures(texture_paths);
 
@@ -235,10 +253,15 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
         }
     }
     this->vertices = outVertices;
+
+    timer.showDuration("Finished Vector Displacement in ");
 }
 
 void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
 {
+
+    Timer timer;
+    timer.start();
 
     std::vector<Image> textures = initTextures(texture_paths);
 
@@ -293,10 +316,15 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
         }
     }
     this->vertices = outVertices;
+    
+    timer.showDuration("Finished Normal Displacement in ");
 }
 
 void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamma)
 {
+
+    Timer timer;
+    timer.start();
 
     std::vector<Image> textures = initTextures(texture_paths);
 
@@ -350,10 +378,15 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
             }
         }
     }
+
+    timer.showDuration("Finished color to polypaint in ");
 }
 
 void GoZ::importMask(std::vector<std::string>& texture_paths)
 {
+
+    Timer timer;
+    timer.start();
 
     std::vector<Image> textures = initTextures(texture_paths);
 
@@ -408,4 +441,6 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
         }
     }
     this->mask = outMask;
+
+    timer.showDuration("Finished mask import in ");
 }
