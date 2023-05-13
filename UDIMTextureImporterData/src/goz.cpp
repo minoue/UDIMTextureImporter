@@ -2,9 +2,8 @@
 #include "FromZ/src/writeGoZFile.h"
 
 #include "goz.hpp"
-#include "util.hpp"
 #include "timer.hpp"
-
+#include "util.hpp"
 
 GoZ::GoZ() {};
 
@@ -83,7 +82,6 @@ void GoZ::computeVertexNormals()
     }
 
     timer.showDuration("Vertex normal calculated in ");
-
 }
 
 // https://stackoverflow.com/questions/5255806/how-to-calculate-tangent-and-binorma
@@ -156,7 +154,6 @@ std::vector<Image> GoZ::initTextures(std::vector<std::string>& texture_paths)
 
 void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
 {
-
 
     Timer timer;
     timer.start();
@@ -316,7 +313,7 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
         }
     }
     this->vertices = outVertices;
-    
+
     timer.showDuration("Finished Normal Displacement in ");
 }
 
