@@ -60,7 +60,7 @@ Go to `ZPlugin` -> `UDIM Texture Importer`, and select the texture type you want
 
 <img src="./img/menu.png" alt= “” width="200">
 
-*If your textures are sRGB and trying to import them as polypaint, set the gamma slider to 2.2*
+*If your color maps are linear and trying to import them as polypaint, set the gamma slider to 2.2*
 
 ## Known issues
 Tiff images of zip compression type may not work properly for mask import on Windows. In that case, use LZW compression Tiff or use another format such as PNG.
