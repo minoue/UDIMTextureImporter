@@ -1,10 +1,11 @@
 # UDIM Texture Importer for ZBrush
 
-https://user-images.githubusercontent.com/7100231/226717384-3f47a9d0-e34f-4216-8190-48a2260320f9.mp4
+https://github.com/minoue/UDIMTextureImporter/assets/7100231/fbe57663-92da-47d2-b9c6-264a2953a150
 
 ## Notes:
 
 **This plugin may still have bugs. Be sure to make a new save, create a new layer, and run it on that.**
+**If you get an error or ZBrush clashes, try different image format.**
 
 ## Getting Started
 
