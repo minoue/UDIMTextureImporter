@@ -193,15 +193,6 @@
         // Cleanup
         [MemDelete, ZFileUTils_FileExt]
 
-        // Get current position
-        [VarDef, posX, 0]
-        [VarDef, posY, 0]
-        [VarDef, posZ, 0]
-        [VarSet, posX, [IGet,Tool:Geometry:X Position]]
-        [VarSet, posY, [IGet,Tool:Geometry:Y Position]]
-        [VarSet, posZ, [IGet,Tool:Geometry:Z Position]]
-        
-
         [if, fileCount > 0,
             [MemCreate, memTexturePaths, 256, 0] // to store single texture path
             [MemCreate, memOutputPaths, 32768, 0]
@@ -255,11 +246,6 @@
 
         [FileNameSetNext, GoZPathFromDLL]
         [IPress,Tool:Import]
-
-        // Re-set position
-        [ISet, Tool:Geometry:X Position, [Var, posX]]
-        [ISet, Tool:Geometry:Y Position, [Var, posY]]
-        [ISet, Tool:Geometry:Z Position, [Var, posZ]]
 
         // Update view for mask
         [If, mode == 4,
