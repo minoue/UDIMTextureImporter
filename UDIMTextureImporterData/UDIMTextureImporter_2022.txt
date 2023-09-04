@@ -1,3 +1,4 @@
+// GUI version 2.1.6
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error

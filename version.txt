@@ -1,0 +1,3 @@
+// UDIMTextureImporter - 4 Sep 2023
+// GUI ver : 2.1.6
+// DLL ver : 2.1.5
