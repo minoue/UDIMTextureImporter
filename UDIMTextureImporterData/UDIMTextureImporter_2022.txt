@@ -1,13 +1,16 @@
-// GUI version 2.1.6
+// GUI version 2.2.0
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
 [VarDef, fileName, ""]
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
+[VarDef, layerPath, ""]
 
 [VarDef, GoZPathToDLL, ""]
 [VarDef, GoZPathFromDLL, ""]
+[VarDef, objPathFromDLL, ""]
+[VarDef, objPathUV, ""]
 [VarDef, Gamma, 1.0]
 
 // Import model
@@ -27,6 +30,8 @@
 
     [VarSet, GoZPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.GoZ"]]
     [VarSet, GoZPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.GoZ"]]
+    [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.obj"]]
+    [VarSet, objPathUV, [FileNameResolvePath, "ZPUBLIC_Temp/tempUVMesh.obj"]]
 
     [If, isMac,
         // For release
@@ -76,14 +81,15 @@
 
 [ISubPalette,"ZPlugin:UDIM Texture Importer"]
        
+
 [ISwitch,
     "ZPlugin:UDIM Texture Importer:Vector Displacement",
     1,
     "Switch 1",
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
+    // [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+    // [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 1]
     ,
     // off command
@@ -101,8 +107,8 @@
     "Switch 1",
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
+    // [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+    // [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 2]
     ,
     // off command
@@ -127,11 +133,11 @@
     // off command
     [VarSet, mode, 0]
     ,
-    0, // Initially disabled?
+    1, // Initially disabled?
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+// [IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
 
 [ISwitch,
     "ZPlugin:UDIM Texture Importer:Mask",
@@ -146,11 +152,11 @@
     // off command
     [VarSet, mode, 0]
     ,
-    0, // Initially disabled?
+    1, // Initially disabled?
     150, // Width
     25, // Height
     ]
-[IEnable, "ZPlugin:UDIM Texture Importer:Mask"]
+// [IEnable, "ZPlugin:UDIM Texture Importer:Mask"]
 
 [ISlider,
     "ZPlugin:UDIM Texture Importer:Gamma",
@@ -174,6 +180,19 @@
             ,
         ]
 
+        // Export temp UV mesh
+        [VarDef, currentSubdiv, [IGet, Tool:Geometry:SDiv]]
+        [ISet,Tool:Geometry:SDiv,1]
+        [FileNameSetNext, objPathUV]
+        [IPress, Tool:Export]
+        [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
+
+        // Create new layer
+        [IPress, Tool:Layers:New]
+        [IPress, Tool:Layers:Rename]
+        [VarSet, layerPath, [StrMerge,"Tool:Layers:", [IGetTitle, "Tool:Layers:Layer Intensity"]]]
+
+        // Import textures
         [VarDef, dialogTitle, "Please select image files"]
         [VarSet, fileExt, "tif,tiff,exr,png,jpg,jpeg"]
         [MemCreate, ZFileUTils_FileExt, 256, 0]
@@ -245,8 +264,20 @@
         ] // End if fileCount
 
 
-        [FileNameSetNext, GoZPathFromDLL]
+        // [FileNameSetNext, GoZPathFromDLL]
+        [If, [FileExists, objPathFromDLL],
+            [FileNameSetNext, objPathFromDLL]
+            [IPress,Tool:Import]
+            , // else
+            [Note, "obj file not found." , , 2]
+        ]
+
+        [ISet, [Var, layerPath] ,0]
+        [ISet,Tool:Geometry:SDiv,1]
+        [FileNameSetNext, objPathUV]
         [IPress,Tool:Import]
+        [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
+        [ISet, [Var, layerPath] ,1]
 
         // Update view for mask
         [If, mode == 4,
