@@ -441,3 +441,40 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
 
     timer.showDuration("Finished mask import in ");
 }
+
+void GoZ::writeObj(std::string out_path) {
+
+    FILE* fp;
+    fp = fopen(out_path.c_str(), "w");
+
+    if (fp == NULL) {
+        printf("%s file cannot be opened\n", out_path.c_str());
+        exit(EXIT_FAILURE);
+    }
+
+    char line[128];
+  
+    for (std::vector<float>& v : this->vertices) {
+        line[0] = '\0'; // clear
+                        //
+        sprintf(line, "v %f %f %f\n", v[0], -v[1], -v[2]); // ZBrush is flipped in y and z by default so negate them
+        
+        fputs(line, fp);
+    }
+
+    char indices[32];
+
+    for (std::vector<int>& face : this->faces) {
+        line[0] = '\0'; // clear
+        sprintf(line, "f");
+        for (int& fv : face) {
+            indices[0] = '\0'; // clear
+            sprintf(indices, " %i", fv+1); // Add +1 for goz -> obj conversion
+            strcat(line, indices);
+        }
+        strcat(line, "\n");
+        fputs(line, fp);
+    }
+
+    fclose(fp);
+}
