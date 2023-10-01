@@ -33,7 +33,8 @@ int EXPORT ImportUDIM(char* GoZFilePath,
         std::string message;
         message = "Cannot find GoZ file : ";
         message.append(gozPath.string());
-        strcpy(pOptBuffer2, message.c_str());
+        // strcpy(pOptBuffer2, message.c_str());
+        strncpy(pOptBuffer2, message.c_str(), static_cast<size_t>(optBuffer2Size));
         return 1;
     }
 
@@ -74,7 +75,8 @@ int EXPORT ImportUDIM(char* GoZFilePath,
         obj.importMask(texture_paths);
     } else {
         // Not supported
-        strcpy(pOptBuffer2, "Invalid mode number");
+        // strcpy(pOptBuffer2, "Invalid mode number");
+        strncpy(pOptBuffer2, "Invalid mode number", static_cast<size_t>(optBuffer2Size));
         return 1;
     }
 

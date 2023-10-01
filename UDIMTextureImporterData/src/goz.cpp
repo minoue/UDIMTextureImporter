@@ -457,7 +457,7 @@ void GoZ::writeObj(std::string out_path) {
     for (std::vector<float>& v : this->vertices) {
         line[0] = '\0'; // clear
                         //
-        sprintf(line, "v %f %f %f\n", v[0], -v[1], -v[2]); // ZBrush is flipped in y and z by default so negate them
+        snprintf(line, sizeof(line), "v %f %f %f\n", v[0], -v[1], -v[2]); // ZBrush is flipped in y and z by default so negate them
         
         fputs(line, fp);
     }
@@ -466,10 +466,10 @@ void GoZ::writeObj(std::string out_path) {
 
     for (std::vector<int>& face : this->faces) {
         line[0] = '\0'; // clear
-        sprintf(line, "f");
+        snprintf(line, sizeof(line), "f");
         for (int& fv : face) {
             indices[0] = '\0'; // clear
-            sprintf(indices, " %i", fv+1); // Add +1 for goz -> obj conversion
+            snprintf(indices, sizeof(indices), " %i", fv+1); // Add +1 for goz -> obj conversion
             strcat(line, indices);
         }
         strcat(line, "\n");
