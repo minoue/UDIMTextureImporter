@@ -1,4 +1,4 @@
-// GUI version 2.2.0
+// GUI version 2.2.1
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -179,19 +179,7 @@
             [Exit]
             ,
         ]
-
-        // Export temp UV mesh
-        [VarDef, currentSubdiv, [IGet, Tool:Geometry:SDiv]]
-        [ISet,Tool:Geometry:SDiv,1]
-        [FileNameSetNext, objPathUV]
-        [IPress, Tool:Export]
-        [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
-
-        // Create new layer
-        [IPress, Tool:Layers:New]
-        [IPress, Tool:Layers:Rename]
-        [VarSet, layerPath, [StrMerge,"Tool:Layers:", [IGetTitle, "Tool:Layers:Layer Intensity"]]]
-
+        
         // Import textures
         [VarDef, dialogTitle, "Please select image files"]
         [VarSet, fileExt, "tif,tiff,exr,png,jpg,jpeg"]
@@ -205,13 +193,27 @@
             [Exit]
             ,
         ]
+        
+        // Cleanup
+        [MemDelete, ZFileUTils_FileExt]
+
+        // Export temp UV mesh
+        // Return obj file has no UVs so needs to export/import UV mesh to update 
+        // UVs at the end of the process
+        [VarDef, currentSubdiv, [IGet, Tool:Geometry:SDiv]]
+        [ISet,Tool:Geometry:SDiv,1]
+        [FileNameSetNext, objPathUV]
+        [IPress, Tool:Export]
+        [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
+
+        // Create new layer
+        [IPress, Tool:Layers:New]
+        [IPress, Tool:Layers:Rename]
+        [VarSet, layerPath, [StrMerge,"Tool:Layers:", [IGetTitle, "Tool:Layers:Layer Intensity"]]]
 
         // Export GoZ file
         [FileNameSetNext, GoZPathToDLL]
         [IPress, Tool:Export]
-
-        // Cleanup
-        [MemDelete, ZFileUTils_FileExt]
 
         [if, fileCount > 0,
             [MemCreate, memTexturePaths, 256, 0] // to store single texture path
