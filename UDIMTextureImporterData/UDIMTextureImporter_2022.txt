@@ -1,4 +1,4 @@
-// GUI version 2.2.1
+// GUI version 2.2.2
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -272,13 +272,16 @@
             [IPress,Tool:Import]
             , // else
             [Note, "obj file not found." , , 2]
+            [Exit]
         ]
 
+        [ISet, [Var, layerPath] ,1]
         [ISet, [Var, layerPath] ,0]
         [ISet,Tool:Geometry:SDiv,1]
         [FileNameSetNext, objPathUV]
         [IPress,Tool:Import]
         [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
+        [ISet, [Var, layerPath] ,0]
         [ISet, [Var, layerPath] ,1]
 
         // Update view for mask
