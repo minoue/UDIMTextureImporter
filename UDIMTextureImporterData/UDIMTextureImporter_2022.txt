@@ -1,4 +1,4 @@
-// GUI version 2.2.2
+// GUI version 2.2.3
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -6,6 +6,8 @@
 [VarDef, udimPluginPath, ""]
 [VarDef, dllLog, ""]
 [VarDef, layerPath, ""]
+[VarDef, subtoolNameOrig, ""]
+[VarDef, currentSubdiv, 0]
 
 [VarDef, GoZPathToDLL, ""]
 [VarDef, GoZPathFromDLL, ""]
@@ -31,7 +33,7 @@
     [VarSet, GoZPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.GoZ"]]
     [VarSet, GoZPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.GoZ"]]
     [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.obj"]]
-    [VarSet, objPathUV, [FileNameResolvePath, "ZPUBLIC_Temp/tempUVMesh.obj"]]
+    // [VarSet, objPathUV, [FileNameResolvePath, "ZPUBLIC_Temp/tempUVMesh.obj"]]
 
     [If, isMac,
         // For release
@@ -196,11 +198,15 @@
         
         // Cleanup
         [MemDelete, ZFileUTils_FileExt]
+        
+        // Store orig tool name
+        [VarSet, subtoolNameOrig, [IGetTitle,Tool:ItemInfo]]
+        [VarSet, objPathUV, [FileNameResolvePath, [StrMerge, "ZPUBLIC_Temp/", subtoolNameOrig, "obj"]]]
 
         // Export temp UV mesh
         // Return obj file has no UVs so needs to export/import UV mesh to update 
         // UVs at the end of the process
-        [VarDef, currentSubdiv, [IGet, Tool:Geometry:SDiv]]
+        [VarSet, currentSubdiv, [IGet, Tool:Geometry:SDiv]]
         [ISet,Tool:Geometry:SDiv,1]
         [FileNameSetNext, objPathUV]
         [IPress, Tool:Export]
