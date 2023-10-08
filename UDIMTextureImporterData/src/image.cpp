@@ -6,8 +6,11 @@
 
 #include "stb_image.h"
 #include "image.hpp"
-#include "tinyexr.h"
 #include "util.hpp"
+
+#pragma warning(push, 0)
+#include "tinyexr.h"
+#pragma warning(pop)
 
 Image::Image() {};
 
