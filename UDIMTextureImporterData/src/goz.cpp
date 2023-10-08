@@ -1,5 +1,9 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#pragma warning(push, 0)
 #include "FromZ/src/readGoZFile.h"
 #include "FromZ/src/writeGoZFile.h"
+#pragma warning(pop)
 
 #include "goz.hpp"
 #include "timer.hpp"
