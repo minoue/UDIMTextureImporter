@@ -20,14 +20,6 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     int optBuffer2Size,
     char** zData)
 {
-#ifdef _WIN32
-    // Show output console for only for Windows
-    FILE* fp;
-    AllocConsole();
-    freopen_s(&fp, "CONOUT$", "w", stdout);
-    freopen_s(&fp, "CONERR$", "w", stderr);
-#endif
-
     std::string GoZPathStr(GoZFilePath);
 
     // If a path from zscript starts with '!:', delete them.
@@ -101,11 +93,6 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     // Use obj file format instead
     gozPath.replace_extension("obj");
     obj.writeObj(gozPath.string());
-
-#ifdef _WIN32
-    fclose(fp);
-    FreeConsole();
-#endif
 
     return 0;
 }
