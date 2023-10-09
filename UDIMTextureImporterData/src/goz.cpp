@@ -258,11 +258,13 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
     timer.showDuration("Finished Vector Displacement in ");
 }
 
-void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
+void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths, double midValue)
 {
 
     Timer timer;
     timer.start();
+
+    std::cout << "Mid value : " << midValue << std::endl;
 
     std::vector<Image> textures = initTextures(texture_paths);
 
@@ -310,7 +312,7 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths)
                     img.width,
                     img.height,
                     img.nchannels);
-                Vector3f new_pp = P0 + (N * rgb.x());
+                Vector3f new_pp = P0 + (N * (rgb.x() - midValue));
                 std::vector<float> xyz = { new_pp.x(), new_pp.y(), new_pp.z() };
                 outVertices[static_cast<size_t>(vertexID)] = xyz;
             }

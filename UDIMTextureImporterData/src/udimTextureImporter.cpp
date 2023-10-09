@@ -13,7 +13,7 @@
 #include "udimTextureImporter.hpp"
 
 int EXPORT ImportUDIM(char* GoZFilePath,
-    double gamma,
+    double midValue,
     char* pOptBuffer1,
     int optBuffer1Size,
     char* pOptBuffer2,
@@ -75,10 +75,12 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     GoZ obj;
     obj.read(gozPath.string());
 
+    double gamma = 1.0;
+
     if (mode == 1) {
         obj.importVectorDisplacement(texture_paths);
     } else if (mode == 2) {
-        obj.importNormalDisplacement(texture_paths);
+        obj.importNormalDisplacement(texture_paths, midValue);
     } else if (mode == 3) {
         obj.importVertexColor(texture_paths, gamma);
     } else if (mode == 4) {
