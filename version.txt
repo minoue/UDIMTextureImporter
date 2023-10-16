@@ -1,3 +1,7 @@
-// UDIMTextureImporter - 4 Sep 2023
-// GUI ver : 2.1.6
-// DLL ver : 2.1.5
+// UDIMTextureImporter 2.3.0
+
+// GUI ver : 2.3.0
+// DLL ver : 2.2.1
+// libtiff ver : 4.6.0
+// zlib ver : 1.3
+// libdeflate ver : 1.19
