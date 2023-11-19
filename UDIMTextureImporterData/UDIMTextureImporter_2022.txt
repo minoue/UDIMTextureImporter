@@ -1,4 +1,4 @@
-// GUI version 2.3.0
+// GUI version 2.3.1
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -21,7 +21,6 @@
 // 1 : Vector Displacement
 // 2 : Normal
 // 3 : Color
-// 4 : Mask
 [VarDef, mode, 1]
 
 
@@ -91,8 +90,7 @@
     "Switch 1",
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
-    // [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
-    // [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [VarSet, mode, 1]
     ,
     // off command
@@ -110,8 +108,7 @@
     "Switch 1",
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
-    // [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
-    // [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
+    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
     [VarSet, mode, 2]
     ,
     // off command
@@ -130,7 +127,6 @@
     // on command
     [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
     [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Mask"]
     [VarSet, mode, 3]
     ,
     // off command
@@ -140,26 +136,8 @@
     150, // Width
     25, // Height
     ]
-// [IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
+[IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
 
-[ISwitch,
-    "ZPlugin:UDIM Texture Importer:Mask",
-    0,
-    "Switch 1",
-    // on command
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Vector Displacement"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Normal Displacement"]
-    [IUnPress, "ZPlugin:UDIM Texture Importer:Vertex Color"]
-    [VarSet, mode, 4]
-    ,
-    // off command
-    [VarSet, mode, 0]
-    ,
-    1, // Initially disabled?
-    150, // Width
-    25, // Height
-    ]
-// [IEnable, "ZPlugin:UDIM Texture Importer:Mask"]
 
 [ISlider,
     "ZPlugin:UDIM Texture Importer:Gamma",
@@ -306,13 +284,6 @@
         [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
         [ISet, [Var, layerPath] ,0]
         [ISet, [Var, layerPath] ,1]
-
-        // Update view for mask
-        [If, mode == 4,
-            [IPress,Tool:Masking:Inverse]
-            [IPress,Tool:Masking:Inverse]
-            ,
-        ]
 
         // Cleanup
         [If, [FileExists, GoZPathFromDLL],
