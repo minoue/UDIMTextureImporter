@@ -448,7 +448,7 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
     timer.showDuration("Finished mask import in ");
 }
 
-void GoZ::writeObj(std::string out_path) {
+void GoZ::writeObj(std::string out_path, bool exportColor) {
 
     FILE* fp;
     fp = fopen(out_path.c_str(), "w");
@@ -460,11 +460,23 @@ void GoZ::writeObj(std::string out_path) {
 
     char line[128];
   
-    for (std::vector<float>& v : this->vertices) {
+    // Export Vertex positions
+    size_t numVerts = this->vertices.size();
+    
+    for (size_t i=0; i<numVerts; i++) {
+        std::vector<float>& v = this->vertices[i];
+        std::vector<float>& Cd = this->vertexColor[i];
         line[0] = '\0'; // clear
                         //
-        snprintf(line, sizeof(line), "v %f %f %f\n", v[0], -v[1], -v[2]); // ZBrush is flipped in y and z by default so negate them
-        
+        if (exportColor) {
+            snprintf(
+                line,
+                sizeof(line),
+                "v %f %f %f %f %f %f\n", v[0], -v[1], -v[2], Cd[0], Cd[1], Cd[2]); // ZBrush is flipped in y and z by default so negate them
+        } else {
+            snprintf(line, sizeof(line), "v %f %f %f\n", v[0], -v[1], -v[2]);
+        }
+
         fputs(line, fp);
     }
 

@@ -92,7 +92,12 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     // Disable GoZ import until offset issue is resolved. 
     // Use obj file format instead
     gozPath.replace_extension("obj");
-    obj.writeObj(gozPath.string());
+    
+    if (mode == 3) {
+        obj.writeObj(gozPath.string(), true);
+    } else {
+        obj.writeObj(gozPath.string(), false);
+    }
 
     return 0;
 }
