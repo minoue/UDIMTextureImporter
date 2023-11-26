@@ -1,4 +1,4 @@
-// GUI version 2.3.2
+// GUI version 2.3.3
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -10,7 +10,6 @@
 [VarDef, currentSubdiv, 0]
 
 [VarDef, GoZPathToDLL, ""]
-[VarDef, GoZPathFromDLL, ""]
 [VarDef, objPathFromDLL, ""]
 [VarDef, objPathUV, ""]
 [VarDef, Gamma, 1.0]
@@ -30,10 +29,8 @@
 	[VarSet, isMac, [ZBrushInfo, 6]]	// check Mac or PC
 	// Make sure we have the dll and set its path
 
-    [VarSet, GoZPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_to_DLL.GoZ"]]
-    [VarSet, GoZPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.GoZ"]]
-    [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/dspImporter_from_DLL.obj"]]
-    // [VarSet, objPathUV, [FileNameResolvePath, "ZPUBLIC_Temp/tempUVMesh.obj"]]
+    [VarSet, GoZPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/UDIMImporter_to_DLL.GoZ"]]
+    [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/UDIMImporter_from_DLL.obj"]]
 
     [If, isMac,
         // For release
@@ -267,7 +264,6 @@
         ] // End if fileCount
 
 
-        // [FileNameSetNext, GoZPathFromDLL]
         [If, [FileExists, objPathFromDLL],
             [FileNameSetNext, objPathFromDLL]
             [IPress,Tool:Import]

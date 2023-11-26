@@ -85,7 +85,7 @@ int EXPORT ImportUDIM(char* GoZFilePath,
     }
 
     // Export modified GoZ file
-    gozPath.replace_filename("dspImporter_from_DLL.GoZ");
+    gozPath.replace_filename("UDIMImporter_from_DLL.GoZ");
     std::cout << "GoZ output path: " << gozPath.string() << std::endl;
     // obj.write(gozPath.string());
 
