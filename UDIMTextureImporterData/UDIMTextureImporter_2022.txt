@@ -1,4 +1,4 @@
-// GUI version 2.3.1
+// GUI version 2.3.2
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -286,38 +286,6 @@
         [ISet, [Var, layerPath] ,1]
 
         // Cleanup
-        [If, [FileExists, GoZPathFromDLL],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #GoZPathFromDLL]] // Delete this file...
-            [If, err,
-                [Note, "Failed to delete the sculpted mesh." , , 2]
-            , //else OK
-                // Do nothing
-            ]
-        , // else no file
-            // [Note, "No file to delete!" , , 2]
-        ]
-
-        [If, [FileExists, GoZPathToDLL],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", #GoZPathToDLL]] // Delete this file...
-            [If, err,
-                [Note, "Failed to delete the raw mesh." , , 2]
-            , //else OK
-                // Do nothing
-            ]
-        , // else no file
-            // [Note, "No file to delete!" , , 2]
-        ]
-        
-        [If, [FileExists, [StrMerge, "!:", [Var, GoZPathToDLL]]],
-            [VarSet, err, [FileExecute, [Var, dllPath], "FileDelete", [StrMerge, "!:", [Var, objPathToDLL]]]]
-            [If, err,
-                [Note, "Failed to delete the raw mesh." , , 2]
-            , //else OK
-                // Do nothing
-            ]
-        , // else no file
-            // [Note, "No file to delete!" , , 2]
-        ]
 
         [MessageOK, "Done"],
 
