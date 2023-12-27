@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(UDIMTextureImporter)
 
-set(DLL_VERSION 2.3.2)
+set(DLL_VERSION 2.3.3)
 
 set(SOURCE_FILES
     ../UDIMTextureImporterData/src/udimTextureImporter.cpp
