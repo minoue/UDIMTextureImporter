@@ -12,7 +12,7 @@
 #include "goz.hpp"
 #include "udimTextureImporter.hpp"
 
-int EXPORT ImportUDIM(char* GoZFilePath,
+float EXPORT ImportUDIM(char* GoZFilePath,
     double midValue,
     char* pOptBuffer1,
     int optBuffer1Size,
