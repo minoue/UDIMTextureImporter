@@ -85,13 +85,11 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     }
 
     // Export modified GoZ file
-    gozPath.replace_filename("UDIMImporter_from_DLL.GoZ");
-    std::cout << "GoZ output path: " << gozPath.string() << std::endl;
-    // obj.write(gozPath.string());
+    gozPath.replace_filename("UDIMImporter_from_DLL.obj");
 
     // Disable GoZ import until offset issue is resolved. 
     // Use obj file format instead
-    gozPath.replace_extension("obj");
+    // gozPath.replace_extension("obj");
     
     if (mode == 3) {
         obj.writeObj(gozPath.string(), true);
