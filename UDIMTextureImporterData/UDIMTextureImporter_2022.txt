@@ -1,4 +1,4 @@
-// GUI version 2.3.3
+// GUI version 2.3.4
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -247,7 +247,7 @@
                             memOutputPaths,
                             memDllLog]]
             [If, err,
-                [Note, "An error has occured"]
+                [Note, "Failed to run the command in DLL."]
                 [MemReadString, memDllLog, dllLog]
                 [Note, [Var, dllLog]]
                 [MemDelete, memTexturePaths]
