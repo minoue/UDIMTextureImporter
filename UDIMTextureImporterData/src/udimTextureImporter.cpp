@@ -78,8 +78,6 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         obj.importNormalDisplacement(texture_paths, midValue);
     } else if (mode == 3) {
         obj.importVertexColor(texture_paths, gamma);
-    } else if (mode == 4) {
-        obj.importMask(texture_paths);
     } else {
         strncpy(pOptBuffer2, "Invalid mode number", static_cast<size_t>(optBuffer2Size));
         Logger::close();

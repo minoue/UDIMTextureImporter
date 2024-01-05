@@ -17,7 +17,6 @@ public:
     void importVectorDisplacement(std::vector<std::string>& texture_paths);
     void importNormalDisplacement(std::vector<std::string>& texture_paths, double midValue);
     void importVertexColor(std::vector<std::string>& texture_paths, double gamma);
-    void importMask(std::vector<std::string>& texture_paths);
 
 private:
     std::string name;

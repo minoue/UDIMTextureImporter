@@ -392,69 +392,6 @@ void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamm
     timer.showDuration("Finished color to polypaint in ");
 }
 
-void GoZ::importMask(std::vector<std::string>& texture_paths)
-{
-
-    Timer timer;
-    timer.start();
-
-    std::vector<Image> textures = initTextures(texture_paths);
-
-    // Init mask value array with 0.0
-    std::vector<float> outMask(this->mask.size(), 0.0);
-
-    size_t numFaces = this->faces.size();
-    for (size_t i = 0; i < numFaces; i++) {
-        std::vector<int>& faceVertices = this->faces[i];
-        std::vector<std::pair<float, float>>& faceUVs = this->UVs[i];
-
-        size_t numFaceVertices = faceVertices.size();
-
-        for (size_t j = 0; j < numFaceVertices; j++) {
-
-            int vertexID = faceVertices[j];
-            std::vector<float>& P = this->vertices[static_cast<size_t>(vertexID)];
-
-            Vector3f uv;
-            uv << faceUVs[j].first, faceUVs[j].second, 0.0;
-
-            Vector3f P0(P.data());
-
-            Vector3f N;
-            N = this->normals[static_cast<size_t>(vertexID)];
-            N.normalize();
-
-            float u = uv.x();
-            float v = uv.y();
-
-            size_t udim = ImageUtils::get_udim(u, v);
-
-            if (udim > textures.size()) {
-                // If UVs are outside of the given UDIM range, use 0.0
-                continue;
-            }
-
-            Image& img = textures[udim - 1];
-
-            if (!img.isEmpty) {
-                Vector2f local_uv = ImageUtils::localize_uv(u, v);
-                Vector3f rgb = ImageUtils::get_pixel_values(
-                    local_uv.x(),
-                    local_uv.y(),
-                    img.pixels,
-                    img.width,
-                    img.height,
-                    img.nchannels);
-                float maskValue = rgb.x();
-                outMask[static_cast<size_t>(vertexID)] = maskValue;
-            }
-        }
-    }
-    this->mask = outMask;
-
-    timer.showDuration("Finished mask import in ");
-}
-
 void GoZ::writeObj(std::string out_path, bool exportColor) {
 
     LOG("Exporting obj file for ZBruush...");
