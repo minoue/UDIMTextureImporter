@@ -38,7 +38,6 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         std::string message;
         message = "Cannot find GoZ file : ";
         message.append(gozPath.string());
-        // strcpy(pOptBuffer2, message.c_str());
         strncpy(pOptBuffer2, message.c_str(), static_cast<size_t>(optBuffer2Size));
         Logger::close();
         return 1;
@@ -82,8 +81,6 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     } else if (mode == 4) {
         obj.importMask(texture_paths);
     } else {
-        // Not supported
-        // strcpy(pOptBuffer2, "Invalid mode number");
         strncpy(pOptBuffer2, "Invalid mode number", static_cast<size_t>(optBuffer2Size));
         Logger::close();
         return 1;
@@ -93,9 +90,8 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     // Export modified GoZ file
     gozPath.replace_filename("UDIMImporter_from_DLL.obj");
 
-    // Disable GoZ import until offset issue is resolved. 
-    // Use obj file format instead
-    // gozPath.replace_extension("obj");
+    // Disabled GoZ import until offset issue is resolved. 
+    // Using obj file format instead
     
     if (mode == 3) {
         obj.writeObj(gozPath.string(), true);
