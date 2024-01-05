@@ -9,6 +9,7 @@ public:
     ~Timer();
     void start();
     void showDuration(std::string message);
+    static std::string getCurrentTime();
 
 private:
     std::chrono::system_clock::time_point start_point;

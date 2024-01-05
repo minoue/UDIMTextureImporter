@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define LOG( message ) { Logger::write( message ); }
 
 #include <cstdlib>
 #include <cstring>
@@ -9,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "logger.hpp"
 #include "goz.hpp"
 #include "udimTextureImporter.hpp"
 
@@ -28,6 +30,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     }
 
     std::filesystem::path gozPath(GoZPathStr);
+    Logger::init(gozPath.string());
 
     // Check if GoZ file exists
     bool gozFileExist = std::filesystem::exists(gozPath);
@@ -37,6 +40,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         message.append(gozPath.string());
         // strcpy(pOptBuffer2, message.c_str());
         strncpy(pOptBuffer2, message.c_str(), static_cast<size_t>(optBuffer2Size));
+        Logger::close();
         return 1;
     }
 
@@ -71,16 +75,20 @@ float EXPORT ImportUDIM(char* GoZFilePath,
 
     if (mode == 1) {
         obj.importVectorDisplacement(texture_paths);
+        LOG("Applying Vector Displacement.")
     } else if (mode == 2) {
         obj.importNormalDisplacement(texture_paths, midValue);
+        LOG("Applying Normal Displacement.")
     } else if (mode == 3) {
         obj.importVertexColor(texture_paths, gamma);
+        LOG("Applying Vertex Color.")
     } else if (mode == 4) {
         obj.importMask(texture_paths);
     } else {
         // Not supported
         // strcpy(pOptBuffer2, "Invalid mode number");
         strncpy(pOptBuffer2, "Invalid mode number", static_cast<size_t>(optBuffer2Size));
+        Logger::close();
         return 1;
     }
 
@@ -96,6 +104,8 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     } else {
         obj.writeObj(gozPath.string(), false);
     }
+
+    Logger::close();
 
     return 0;
 }

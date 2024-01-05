@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(UDIMTextureImporter)
 
-set(DLL_VERSION 2.3.4)
+set(DLL_VERSION 2.4.0)
 
 set(SOURCE_FILES
     ../UDIMTextureImporterData/src/udimTextureImporter.cpp
@@ -9,6 +9,7 @@ set(SOURCE_FILES
     ../UDIMTextureImporterData/src/util.cpp
     ../UDIMTextureImporterData/src/image.cpp
     ../UDIMTextureImporterData/src/timer.cpp
+    ../UDIMTextureImporterData/src/logger.cpp
 )
 
 set(CMAKE_CXX_STANDARD 17)
