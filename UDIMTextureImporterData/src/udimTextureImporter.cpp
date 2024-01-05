@@ -75,13 +75,10 @@ float EXPORT ImportUDIM(char* GoZFilePath,
 
     if (mode == 1) {
         obj.importVectorDisplacement(texture_paths);
-        LOG("Applying Vector Displacement.")
     } else if (mode == 2) {
         obj.importNormalDisplacement(texture_paths, midValue);
-        LOG("Applying Normal Displacement.")
     } else if (mode == 3) {
         obj.importVertexColor(texture_paths, gamma);
-        LOG("Applying Vertex Color.")
     } else if (mode == 4) {
         obj.importMask(texture_paths);
     } else {
@@ -91,6 +88,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         Logger::close();
         return 1;
     }
+    LOG("Finished applying UDIM textures.")
 
     // Export modified GoZ file
     gozPath.replace_filename("UDIMImporter_from_DLL.obj");
@@ -105,6 +103,7 @@ float EXPORT ImportUDIM(char* GoZFilePath,
         obj.writeObj(gozPath.string(), false);
     }
 
+    LOG("Done.")
     Logger::close();
 
     return 0;

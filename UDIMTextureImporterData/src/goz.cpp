@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define LOG( message ) { Logger::write( message ); }
 
 #pragma warning(push, 0)
 #include "FromZ/src/readGoZFile.h"
@@ -8,6 +9,7 @@
 #include "goz.hpp"
 #include "timer.hpp"
 #include "util.hpp"
+#include "logger.hpp"
 
 GoZ::GoZ() {};
 
@@ -24,12 +26,12 @@ void GoZ::read(std::string inputPath)
 
 void GoZ::write(std::string outPath)
 {
-    std::cout << "Writing GoZ File..." << std::endl;
     FromZ::writeGoZFile(outPath, name, vertices, faces, UVs, vertexColor, mask, groups);
 }
 
 void GoZ::computeVertexNormals()
 {
+    LOG("calculating vertex normal.")
 
     Timer timer;
     timer.start();
@@ -85,6 +87,7 @@ void GoZ::computeVertexNormals()
         n.normalize();
     }
 
+    LOG("calculated vertex normal sucessfully.")
     timer.showDuration("Vertex normal calculated in ");
 }
 
@@ -158,6 +161,7 @@ std::vector<Image> GoZ::initTextures(std::vector<std::string>& texture_paths)
 
 void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
 {
+    LOG("Applying Vector Displacement.")
 
     Timer timer;
     timer.start();
@@ -256,10 +260,12 @@ void GoZ::importVectorDisplacement(std::vector<std::string>& texture_paths)
     this->vertices = outVertices;
 
     timer.showDuration("Finished Vector Displacement in ");
+    LOG("Finished Apllying Vector Displacement.")
 }
 
 void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths, double midValue)
 {
+    LOG("Applying Normal Displacement.")
 
     Timer timer;
     timer.start();
@@ -321,6 +327,7 @@ void GoZ::importNormalDisplacement(std::vector<std::string>& texture_paths, doub
     this->vertices = outVertices;
 
     timer.showDuration("Finished Normal Displacement in ");
+    LOG("Finished Apllying Normal Displacement.")
 }
 
 void GoZ::importVertexColor(std::vector<std::string>& texture_paths, double gamma)
@@ -450,6 +457,8 @@ void GoZ::importMask(std::vector<std::string>& texture_paths)
 
 void GoZ::writeObj(std::string out_path, bool exportColor) {
 
+    LOG("Exporting obj file for ZBruush...");
+
     FILE* fp;
     fp = fopen(out_path.c_str(), "w");
 
@@ -495,4 +504,6 @@ void GoZ::writeObj(std::string out_path, bool exportColor) {
     }
 
     fclose(fp);
+
+    LOG("Finished exporting obj file.");
 }

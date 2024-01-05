@@ -1,5 +1,6 @@
 #define TINYEXR_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
+#define LOG( message ) { Logger::write( message ); }
 
 #include <cmath>
 #include <filesystem>
@@ -7,6 +8,7 @@
 #include "stb_image.h"
 #include "image.hpp"
 #include "util.hpp"
+#include "logger.hpp"
 
 #pragma warning(push, 0)
 #include "tinyexr.h"
@@ -48,7 +50,7 @@ void Image::loadImg(const std::string& path)
 
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &nchannels, 3);
 
-    std::cout << "Loading :" << path << std::endl;
+    LOG("Loading img : " + path);
 
     size_t img_size = static_cast<size_t>(width * height * nchannels);
 
@@ -75,7 +77,7 @@ void Image::loadExr(const std::string& path)
     int& nchannels = this->nchannels;
     nchannels = 4;
 
-    std::cout << "Loading exr :" << path << std::endl;
+    LOG("Loading exr : " + path);
     float* out;
     const char* err = nullptr;
 
@@ -103,7 +105,7 @@ void Image::loadTif(const std::string& path)
     uint32_t width, height;
     uint16_t nc, bitDepth, row;
 
-    std::cout << "Loading tif :" << path << std::endl;
+    LOG("Loading tif : " + path);
 
     TIFF* tif = TIFFOpen(path.c_str(), "r");
 
