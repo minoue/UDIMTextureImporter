@@ -92,7 +92,9 @@ float EXPORT ImportUDIM(char* GoZFilePath,
     // Using obj file format instead
     
     if (mode == 3) {
-        obj.writeObj(gozPath.string(), true);
+        // obj.writeObj(gozPath.string(), true);
+        gozPath.replace_extension("ply");
+        obj.writePly(gozPath.string());
     } else {
         obj.writeObj(gozPath.string(), false);
     }

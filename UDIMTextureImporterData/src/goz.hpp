@@ -14,6 +14,7 @@ public:
     void read(std::string inputPath);
     void write(std::string outPath);
     void writeObj(std::string outPath, bool exportColor);
+    void writePly(std::string outPath);
     void importVectorDisplacement(std::vector<std::string>& texture_paths);
     void importNormalDisplacement(std::vector<std::string>& texture_paths, double midValue);
     void importVertexColor(std::vector<std::string>& texture_paths, double gamma);

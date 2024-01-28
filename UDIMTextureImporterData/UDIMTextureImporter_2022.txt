@@ -1,4 +1,4 @@
-// GUI version 2.3.4
+// GUI version 2.3.5
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -11,6 +11,7 @@
 
 [VarDef, GoZPathToDLL, ""]
 [VarDef, objPathFromDLL, ""]
+[VarDef, plyPathFromDLL, ""]
 [VarDef, objPathUV, ""]
 [VarDef, Gamma, 1.0]
 [VarDef, midValue, 0.0]
@@ -31,6 +32,7 @@
 
     [VarSet, GoZPathToDLL, [FileNameResolvePath, "ZPUBLIC_Temp/UDIMImporter_to_DLL.GoZ"]]
     [VarSet, objPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/UDIMImporter_from_DLL.obj"]]
+    [VarSet, plyPathFromDLL, [FileNameResolvePath, "ZPUBLIC_Temp/UDIMImporter_from_DLL.ply"]]
 
     [If, isMac,
         // For release
@@ -193,21 +195,25 @@
         
         // Store orig tool name
         [VarSet, subtoolNameOrig, [IGetTitle,Tool:ItemInfo]]
-        [VarSet, objPathUV, [FileNameResolvePath, [StrMerge, "ZPUBLIC_Temp/", subtoolNameOrig, "obj"]]]
 
-        // Export temp UV mesh
-        // Return obj file has no UVs so needs to export/import UV mesh to update 
-        // UVs at the end of the process
+        // Save original UV data
+        // Return obj file has no UVs so needs to export/import UV mesh to
+        // update UVs at the end of the process
+        [VarSet, objPathUV, [FileNameResolvePath, [StrMerge, "ZPUBLIC_Temp/", subtoolNameOrig, "obj"]]]
         [VarSet, currentSubdiv, [IGet, Tool:Geometry:SDiv]]
         [ISet,Tool:Geometry:SDiv,1]
         [FileNameSetNext, objPathUV]
         [IPress, Tool:Export]
         [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
 
-        // Create new layer
-        [IPress, Tool:Layers:New]
-        [IPress, Tool:Layers:Rename]
-        [VarSet, layerPath, [StrMerge,"Tool:Layers:", [IGetTitle, "Tool:Layers:Layer Intensity"]]]
+        // Create new layer for displacement
+        // no layer needed for color
+        [If, mode != 3,
+            [IPress, Tool:Layers:New]
+            [IPress, Tool:Layers:Rename]
+            [VarSet, layerPath, [StrMerge,"Tool:Layers:", [IGetTitle, "Tool:Layers:Layer Intensity"]]]
+            , // else, do nothing
+        ]
 
         // Export GoZ file
         [FileNameSetNext, GoZPathToDLL]
@@ -263,25 +269,42 @@
 
         ] // End if fileCount
 
-
-        [If, [FileExists, objPathFromDLL],
-            [FileNameSetNext, objPathFromDLL]
-            [IPress,Tool:Import]
-            , // else
-            [Note, "obj file not found." , , 2]
-            [Exit]
+        [If, mode == 3,
+            // Import color
+            [If, [FileExists, plyPathFromDLL],
+                [FileNameSetNext, plyPathFromDLL]
+                [IPress,Tool:Import]
+                , // else
+                [Note, "ply file not found." , , 2]
+                [Exit]
+            ]
+            , // else, import displacement
+            [If, [FileExists, objPathFromDLL],
+                [FileNameSetNext, objPathFromDLL]
+                [IPress,Tool:Import]
+                , // else
+                [Note, "obj file not found." , , 2]
+                [Exit]
+            ]
         ]
 
-        [ISet, [Var, layerPath] ,1]
-        [ISet, [Var, layerPath] ,0]
+        // Restore UVs
+        [If, mode != 3,
+            [ISet, [Var, layerPath] ,1]
+            [ISet, [Var, layerPath] ,0]
+            ,
+        ]
+
         [ISet,Tool:Geometry:SDiv,1]
         [FileNameSetNext, objPathUV]
         [IPress,Tool:Import]
         [ISet,Tool:Geometry:SDiv, [Var, currentSubdiv]]
-        [ISet, [Var, layerPath] ,0]
-        [ISet, [Var, layerPath] ,1]
 
-        // Cleanup
+        [If, mode != 3,
+            [ISet, [Var, layerPath] ,0]
+            [ISet, [Var, layerPath] ,1]
+            ,
+        ]
 
         [MessageOK, "Done"],
 

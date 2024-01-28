@@ -1,6 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define LOG( message ) { Logger::write( message ); }
 
+#include <stdio.h>
+
 #pragma warning(push, 0)
 #include "FromZ/src/readGoZFile.h"
 #include "FromZ/src/writeGoZFile.h"
@@ -443,4 +445,74 @@ void GoZ::writeObj(std::string out_path, bool exportColor) {
     fclose(fp);
 
     LOG("Finished exporting obj file.");
+}
+
+void GoZ::writePly(std::string out_path) {
+
+    LOG("Exporting ply file for ZBruush...");
+
+    FILE* fp;
+    fp = fopen(out_path.c_str(), "w");
+
+    if (fp == NULL) {
+        printf("%s file cannot be opened\n", out_path.c_str());
+        exit(EXIT_FAILURE);
+    }
+  
+    // Export Vertex positions
+    size_t numVerts = this->vertices.size();
+    size_t numFaces = this->faces.size();
+
+    char header[512];
+    snprintf(header, sizeof(header), "ply\n"
+                                     "format ascii 1.0\n"
+                                     "element vertex %i\n"
+                                     "property float x\n"
+                                     "property float y\n"
+                                     "property float z\n"
+                                     "property uchar red\n"
+                                     "property uchar green\n"
+                                     "property uchar blue\n"
+                                     "property uchar alpha\n"
+                                     "element face %i\n"
+                                     "property list uchar uint vertex_indices\n"
+                                     "end_header\n", (int)numVerts, (int)numFaces);
+
+    fputs(header, fp);
+    
+    char line[128];
+    
+    // Vertices
+    for (size_t i=0; i<numVerts; i++) {
+        std::vector<float>& v = this->vertices[i];
+        std::vector<float>& Cd = this->vertexColor[i];
+        int r = (int)(255 * Cd[0]);
+        int g = (int)(255 * Cd[1]);
+        int b = (int)(255 * Cd[2]);
+        line[0] = '\0'; // clear
+        snprintf(line, sizeof(line), "%f %f %f %i %i %i 255\n", v[0], -v[1], -v[2], r, g, b); // ZBrush is flipped in y and z by default so negate them
+        fputs(line, fp);
+    }
+
+    // Faces
+    char indices[32];
+    
+    for (std::vector<int>& face : this->faces) {
+        line[0] = '\0'; // clear
+        size_t numFaceVerts = face.size();
+
+        snprintf(line, sizeof(line), "%i", (int)numFaceVerts);
+
+        for (int& fv : face) {
+            indices[0] = '\0'; // clear
+            snprintf(indices, sizeof(indices), " %i", fv);
+            strcat(line, indices);
+        }
+        strcat(line, "\n");
+        fputs(line, fp);
+    }
+
+    fclose(fp);
+
+    LOG("Finished exporting ply file.");
 }
