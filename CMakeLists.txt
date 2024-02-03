@@ -4,12 +4,12 @@ project(UDIMTextureImporter)
 set(DLL_VERSION 2.5.0)
 
 set(SOURCE_FILES
-    ../UDIMTextureImporterData/src/udimTextureImporter.cpp
-    ../UDIMTextureImporterData/src/goz.cpp
-    ../UDIMTextureImporterData/src/util.cpp
-    ../UDIMTextureImporterData/src/image.cpp
-    ../UDIMTextureImporterData/src/timer.cpp
-    ../UDIMTextureImporterData/src/logger.cpp
+    ${CMAKE_SOURCE_DIR}/UDIMTextureImporterData/src/udimTextureImporter.cpp
+    ${CMAKE_SOURCE_DIR}/UDIMTextureImporterData/src/goz.cpp
+    ${CMAKE_SOURCE_DIR}/UDIMTextureImporterData/src/util.cpp
+    ${CMAKE_SOURCE_DIR}/UDIMTextureImporterData/src/image.cpp
+    ${CMAKE_SOURCE_DIR}/UDIMTextureImporterData/src/timer.cpp
+    ${CMAKE_SOURCE_DIR}/UDIMTextureImporterData/src/logger.cpp
 )
 
 set(CMAKE_CXX_STANDARD 17)
