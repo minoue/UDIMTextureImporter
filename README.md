@@ -28,11 +28,16 @@ For MacOS, you must install libtiff first. `brew install libtiff`
 * 8/16/32 bit tiff
 * Mid point can be changed between 0-1
 
-#### ~~Color~~
-* ~~8bit tiff/jpg/png or 16bit tiff~~
-
-#### ~~Mask~~
-* ~~8bit or 16bit black/white tiff~~
+#### Color
+* 8bit tiff/jpg/png or 16bit tiff
+* **Limited support**
+    * Tool loses UVs after importing color textures because of technical limitation, so you need to restore it manually.
+        1. Switch to the lowest subdiv.
+        2. Export obj as UV backup.
+        3. Switch to the highest subdiv.
+        4. Import color textures.
+        5. Switch to the lowest subdiv.
+        6. Import the obj file to restore UVs.
 
 #### Supported tiff compression
 * Deflate
@@ -58,23 +63,12 @@ ZStartup/
 ```
 
 #### MacOS & ZBrush2022
-Not supported yet.
+--
 
 ## Usage
 Go to `ZPlugin` -> `UDIM Texture Importer`, and select the texture type you want to import.
 
 <img src="./img/menu.png" alt= “” width="200">
-
-## Known issues
-Not all compression types of tiff are supported. Use LZW, None, and Deflate.
-
-## Roadmap
-- [x] Vector Displacement
-- [x] Normal Displacement
-- [ ] Color to polypaint
-- [ ] B/W mask
-- [x] Bump
-- [ ] Additional image formats
 
 ## Build Instruction
 
