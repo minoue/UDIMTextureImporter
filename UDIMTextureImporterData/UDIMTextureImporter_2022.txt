@@ -1,4 +1,4 @@
-// GUI version 2.3.6
+// GUI version 2.3.7
 
 [VarDef, dllPath,""] //path to dll
 [VarDef, err, 0] //standard error
@@ -137,20 +137,6 @@
     ]
 [IEnable, "ZPlugin:UDIM Texture Importer:Vertex Color"]
 
-
-// [ISlider,
-//     "ZPlugin:UDIM Texture Importer:Gamma",
-//     1, // initial value
-//     0.1, // Resolution
-//     1, // Min Value
-//     2.2, // Max Value
-//     , // Info text
-//     [VarSet, Gamma, [IGet, "ZPlugin:UDIM Texture Importer:Gamma"]], // Command group
-//     1,
-//     75,
-//     0
-// ]
-// [IEnable, "ZPlugin:UDIM Texture Importer:Gamma"]
 
 [ISlider,
     "ZPlugin:UDIM Texture Importer:Mid Value",
