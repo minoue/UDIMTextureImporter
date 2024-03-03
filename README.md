@@ -1,10 +1,7 @@
 # UDIM Texture Importer for ZBrush
 
-https://github.com/minoue/UDIMTextureImporter/assets/7100231/fbe57663-92da-47d2-b9c6-264a2953a150
-
-## Notes:
-
-**This plugin may still have bugs. Be sure to sve your tool first.**
+Import UDIM displacement and color maps.<br>
+This plugin may still have bugs. Be sure to sve your tool first.
 
 ## Getting Started
 
@@ -30,14 +27,8 @@ For MacOS, you must install libtiff first. `brew install libtiff`
 
 #### Color
 * 8bit tiff/jpg/png or 16bit tiff
-* **Limited support**
-    * Tool loses UVs after importing color textures because of technical limitation, so you need to restore it manually.
-        1. Switch to the lowest subdiv.
-        2. Export obj as UV backup.
-        3. Switch to the highest subdiv.
-        4. Import color textures.
-        5. Switch to the lowest subdiv.
-        6. Import the obj file to restore UVs.
+* **Supported but extra steps are required**
+    * Tool loses UVs after importing color textures, so you need to restore it manually. Check the [usage](#usage) section.
 
 #### Supported tiff compression
 * Deflate
@@ -69,6 +60,18 @@ ZStartup/
 Go to `ZPlugin` -> `UDIM Texture Importer`, and select the texture type you want to import.
 
 <img src="./img/menu.png" alt= “” width="200">
+
+### Displacement
+
+### Color
+Tool loses UVs after importing color textures because of technical limitation, so you need to restore it manually.
+
+1. Switch to the lowest subdiv.
+2. Export obj as UV backup.
+3. Switch to the highest subdiv.
+4. Import color textures.
+5. Switch to the lowest subdiv.
+6. Import the obj file to restore UVs.
 
 ## Build Instruction
 
