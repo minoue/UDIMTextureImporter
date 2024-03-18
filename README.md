@@ -1,7 +1,16 @@
 # UDIM Texture Importer for ZBrush
 
-Import UDIM displacement and color maps.<br>
+Import UDIM Vector/Normal displacement.<br>
 This plugin may still have bugs. Be sure to sve your tool first.
+
+![img](./img/demo.gif)
+
+Comparison between the original high res sculpt and the one re-sculpted base mesh using exported vector displacement maps.
+If mesh, UVs, texture maps are all correct and consistent, then the result should be almost the same as the original sculpt.
+![img_compare](./img/compare.gif)
+
+There may be a few small artefacts depending on the texture border edges.
+![img_compare](./img/edge.gif)
 
 ## Getting Started
 
