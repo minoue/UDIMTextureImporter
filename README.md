@@ -1,3 +1,7 @@
+# DEPRECATED
+**This repository/plugin is no longer maintained.
+For an alternative plugin, see the new UDIMTextureImporter3 that is based on GoZ SDK.**
+
 # UDIM Texture Importer for ZBrush
 
 Import UDIM Vector/Normal displacement.<br>
